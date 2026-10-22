@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "task": "simulation_yield",
+  "phase": "exploratory",
+  "seed": 20261023,
+  "control": {"chains": 2, "burn": 100, "draws": 100, "trees": 20},
+  "models": ["dns_macro", "bart_two_stage", "bart_joint"],
+  "simulation": {"n": 120, "replicates": 2, "scenarios": ["linear", "nonlinear", "conditional_persistence"], "noise": ["low", "high"]}
+}

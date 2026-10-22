@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "task": "air",
+  "phase": "exploratory",
+  "seed": 20261023,
+  "control": {"chains": 2, "burn": 100, "draws": 100, "trees": 20, "rho": 0.99},
+  "models": ["bart_static", "linear_dynamic", "bart_two_stage", "bart_joint"],
+  "data": {"path": "data/processed/air_quality.csv", "features": ["PT08_1", "PT08_2", "PT08_3", "PT08_4", "PT08_5", "T", "RH", "AH"]},
+  "evaluation": {"split": "validation", "gaps_hours": [24, 72, 168], "max_blocks": 3, "min_observed_fraction": 0.8}
+}

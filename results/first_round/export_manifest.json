@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "status": "complete_exploratory_export",
+  "limitations": [
+    "All results exploratory; failed diagnostics cannot establish model superiority.",
+    "Failure of convergence diagnostics is not evidence that the research hypothesis is false.",
+    "Different data snapshots and sampler configurations are not pooled.",
+    "Only scores and provenance exported; no raw observations or posterior chains."
+  ],
+  "summary": {
+    "selected_runs": 9,
+    "ledger_runs": 15,
+    "failed_runs_in_ledger": 2,
+    "scored_case_models": 130,
+    "passed_stochastic_case_models": 0,
+    "point_estimate_case_models_exempt": 8,
+    "fit_stages": 117,
+    "fit_stages_passed": 0,
+    "audit_cases": 5,
+    "audit_execution_completed": 5,
+    "audit_diagnostic_passed": 0
+  },
+  "pending": [],
+  "exporter_sha256": "7f9299e93e5078e7a57af934b0cbc9bf1a9c518df34b24d3cca05e44201a2d13",
+  "report_library_sha256": "d9c0135f1dc0cbe7ad2da1a0260ee4711c2f906b7e8c27b2135babb2151b9310",
+  "selected_run_ids": {
+    "yield_pilot": "20261022T174341747780Z-yield_pilot-d216c29e",
+    "yield_diagnostic": "20261022T173918202213Z-yield_diagnostic-2dfcb415",
+    "simulation_yield": "20261022T174027943774Z-simulation_yield-34654078",
+    "simulation_yield_diagnostic": "20261022T173918199075Z-simulation_yield_diagnostic-928a6ac9",
+    "simulation_yield_missing": "20261022T174026706024Z-simulation_yield_missing-e7825d2a",
+    "air_diagnostic": "20261022T173136675021Z-air_diagnostic-e52735dd",
+    "simulation_air_diagnostic": "20261022T173136683849Z-simulation_air_diagnostic-036e60dc",
+    "simulation_air_mixing_check": "20261022T173620494398Z-simulation_air_mixing_check-f2011729",
+    "air_mixing_check": "20261022T173619277606Z-air_mixing_check-6fd39442"
+  },
+  "audit_run_id": "20261022T175120835793Z-mixing-audit-3ba510964dac",
+  "plotting_runtime": {
+    "python": "3.12.14",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "backend": "Agg",
+    "noto_sans_cjk_jp_available": true,
+    "font_family": [
+      "DejaVu Sans",
+      "Noto Sans CJK JP"
+    ],
+    "svg_fonttype": "none",
+    "raster_dpi": 150,
+    "cjk_font_file": "NotoSansCJK-Regular.ttc",
+    "cjk_font_sha256": "b76b0433203017ca80401b2ee0dd69350349871c4b19d504c34dbdd80541690a"
+  },
+  "output_sha256": {
+    "run_ledger.csv": "f377302bfe55adf0ae95c56b4e8bf8713f2b47554ca8643028dac426f7b6fc8d",
+    "provenance.json": "d24eb6ca7fce31ba9a40132b4adeb5b7b7b0a4c96ab5ae81fedd6315c158565f",
+    "case_scores.csv": "8dda8f0d839fb67b802305f03ecb951f2613ccdc22e048233190ef89c3398770",
+    "model_summary.csv": "58a82e5a0835d725ea0852f881b5bf0129ab29cf55db37c38c4483fef9ea915c",
+    "paired_crps.csv": "f5c5cc020d449f279a6996980f32a1a8847c61f284db62f7f426855f05ca2be2",
+    "diagnostic_stages.csv": "78498f925be95e0419053ed9c0db838e4b4c419f4ca7ab9c4ea5080547fea3b0",
+    "audit_ledger.csv": "bf135a35a3b623661a3cd62629377ecaaa03db952a64cb45ea507a8c8498db49",
+    "audit_provenance.json": "c756f960d2b82fe6b821940e3f49ec5bc9c1903d9854ac0ed48023339d5eed20",
+    "observed_data_crps.png": "51c7e47abec12b632884d2e7d8feddeb9552a86c666baa0e9ff6e94d07da5f6f",
+    "observed_data_crps.svg": "d29154a9127f8ba3a258806b6c169467af1d4903a9c9ef558364721c262967d3",
+    "yield_simulation_crps.png": "a2681fd46f2b043426ebd0292674b16a4541bbc80e4e666fc2794c11f01130c0",
+    "yield_simulation_crps.svg": "d86d902a642e6c8cdb2e2f2f22eff84b0438ae0d117b009b7114597e06413e80",
+    "air_simulation_crps.png": "0175e456099f4556510adb1965f566610084747f4e9269b53eded540027a20d3",
+    "air_simulation_crps.svg": "3c3a533ed6a8fa30a08cf7c8ca12957e7b019d9dd1e1ece909b0ada5c0048a59",
+    "diagnostic_stage_counts.png": "9dcd3dfba7285ad63aae24439169851851d33d4c3616fd2f03ff9ffb790479b2",
+    "diagnostic_stage_counts.svg": "8d673e5a0c95a3345592a8d62d38f8aebe9876adff615f432797037178df9b9b",
+    "README.md": "b696fdd0d0e042c2ff8cababc585d2656b9ed1c3b85b96004fbba737c5c9d5bf"
+  }
+}

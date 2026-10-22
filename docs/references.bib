@@ -1,0 +1,114 @@
+% Literature ledger for research_ideas.md.
+% Verification notes deliberately distinguish primary papers, author code,
+% historical project notes, and bibliographic leads. No experimental results
+% or priority/novelty claims follow from inclusion in this file.
+% Verification dates use Asia/Shanghai (UTC+08:00).
+
+@article{chipman2010bart,
+  author = {Chipman, Hugh A. and George, Edward I. and McCulloch, Robert E.},
+  title = {{BART}: Bayesian Additive Regression Trees},
+  journal = {The Annals of Applied Statistics},
+  year = {2010},
+  volume = {4},
+  number = {1},
+  pages = {266--298},
+  doi = {10.1214/09-AOAS285},
+  url = {https://arxiv.org/abs/0806.3286},
+  note = {The primary arXiv abstract and journal metadata were checked on 2026-10-23, confirming title, authors, journal, pages and DOI; the dbarts manual was also inspected. Initial network denial was resolved before this verification.}
+}
+
+@article{huber2022bavart,
+  author = {Huber, Florian and Rossini, Luca},
+  title = {Inference in Bayesian Additive Vector Autoregressive Tree Models},
+  journal = {The Annals of Applied Statistics},
+  year = {2022},
+  volume = {16},
+  number = {1},
+  pages = {104--123},
+  url = {https://arxiv.org/html/2006.16333v2},
+  note = {Primary preprint sections 3 and 4.1 checked on 2026-10-23. The yield application fixes the Nelson--Siegel parameter at 0.0609, extracts three factors by period-specific OLS, models their dynamics with BAVART and maps forecasts back to yields; direct yield modelling is also compared. Stochastic volatility is included. Final journal volume and pages were previously checked against public implementation references; that bibliographic source is secondary.}
+}
+
+@article{huber2023mfbavart,
+  author = {Huber, Florian and Koop, Gary and Onorante, Luca and Pfarrhofer, Michael and Schreiner, Josef},
+  title = {Nowcasting in a Pandemic Using Non-Parametric Mixed Frequency {VARs}},
+  journal = {Journal of Econometrics},
+  year = {2023},
+  volume = {232},
+  number = {1},
+  pages = {52--69},
+  doi = {10.1016/j.jeconom.2020.11.006},
+  url = {https://arxiv.org/abs/2008.12706},
+  note = {Primary arXiv:2008.12706v3 section 2.4.2 checked on 2026-10-23, in addition to the author-maintained mpfarrho/mf-bavart implementation. The paper explicitly uses a linear effect-size approximation for latent-state FFBS; the inspected code projects BART fitted values into VAR coefficients before simulation smoothing. Journal metadata and DOI follow the author repository.}
+}
+
+@misc{mfbavartcode,
+  author = {Pfarrhofer, Michael and collaborators},
+  title = {{MF-BAVART}: Author Replication Code},
+  howpublished = {GitHub repository},
+  url = {https://github.com/mpfarrho/mf-bavart},
+  note = {Inspected README.md and mfbavart_func.R. This software record describes the inspected public implementation, not proof that every version of the associated paper uses identical computational details.}
+}
+
+@misc{deshpande_vcbart,
+  author = {Deshpande, Sameer K. and Bai, Ray and Balocchi, Cecilia and Starling, Jennifer and Weiss, Jordan},
+  title = {{VCBART}: Bayesian Trees for Varying Coefficients},
+  howpublished = {Author-maintained software repository},
+  year = {2026},
+  url = {https://github.com/skdeshpande91/VCBART},
+  note = {README and DESCRIPTION checked for software version 1.2.5. The primary arXiv:2003.06416v8 abstract was also read on 2026-10-23, confirming title, authors and the varying-coefficient BART formulation. The package supports independent or repeated observations. Associated article DOI:10.1214/24-BA1470 follows the author package metadata; final issue metadata remains unchecked. The year in this software entry refers to the inspected software metadata.}
+}
+
+@misc{bie2024regimedns,
+  author = {Bie, Siyu and He, Jingyu and Diebold, Francis X. and Li, Junye},
+  title = {Machine Learning and the Yield Curve: Tree-Based Macroeconomic Regime Switching},
+  year = {2024},
+  eprint = {2408.12863},
+  archivePrefix = {arXiv},
+  url = {https://arxiv.org/abs/2408.12863},
+  note = {Primary arXiv:2408.12863v2 HTML sections 2 and 3.1 and Appendix A checked on 2026-10-23 after initial access denial was resolved. Confirmed the six-dimensional yields--macro model, regime-dependent transition/covariance/means, sequential marginal-likelihood tree selection, and posterior state/parameter sampling conditional on the selected tree. The article uses Liu--Wu zero-coupon yields and manufacturing capacity utilization, not the full data specification of this repository's pilot.}
+}
+
+@article{dewolff2020mogptk,
+  author = {de Wolff, Taco and Cuevas, Alejandro and Tobar, Felipe},
+  title = {{MOGPTK}: The Multi-Output Gaussian Process Toolkit},
+  journal = {Neurocomputing},
+  year = {2020},
+  doi = {10.1016/j.neucom.2020.09.085},
+  url = {https://github.com/GAMES-UChile/mogptk},
+  note = {Bibliographic fields follow the author-maintained repository's recommended citation, including its year. README checked for multi-channel time-series modelling and missing-signal reconstruction capabilities; final issue metadata was not separately checked.}
+}
+
+@misc{riveramunoz_air_missing_lead,
+  author = {Rivera-Mu{\~n}oz, L. M. and others},
+  title = {Missing Data Estimation in a Low-Cost Sensor Network for Measuring Air Quality},
+  doi = {10.1007/s11270-021-05363-1},
+  url = {https://doi.org/10.1007/s11270-021-05363-1},
+  note = {Literature lead listed by the author-maintained MOGPTK repository. Full author list, publication metadata, experimental information set, and whether the task is reference-instrument calibration remain to be verified from the original paper. Not treated as a verified equivalent of online BART dynamic calibration.}
+}
+
+@misc{riveramunoz_air_factorization_lead,
+  author = {Rivera-Mu{\~n}oz, L. M. and others},
+  title = {Deep Matrix Factorization Models for Estimation of Missing Data in a Low-Cost Sensor Network to Measure Air Quality},
+  doi = {10.1016/j.ecoinf.2022.101775},
+  url = {https://doi.org/10.1016/j.ecoinf.2022.101775},
+  note = {Literature lead listed by the author-maintained MOGPTK repository. Full publication details and original methods have not yet been directly checked; reconstruction with future observations must be distinguished from online calibration when assessing comparability.}
+}
+
+@misc{dbartsdocumentation,
+  author = {Dorie, Vincent and Chipman, Hugh and McCulloch, Robert},
+  title = {{dbarts}: Discrete Bayesian Additive Regression Trees Sampler Documentation},
+  howpublished = {CRAN source mirror},
+  url = {https://github.com/cran/dbarts},
+  note = {The bart manual was inspected for the sum-of-trees model, response scaling, predictive draws, saved sampler objects, and weighted likelihood. Package versions and exact sampler interfaces must be pinned by the executable environment.}
+}
+
+@misc{uci_air_quality,
+  author = {Vito, Saverio},
+  title = {Air Quality},
+  year = {2008},
+  howpublished = {UCI Machine Learning Repository dataset},
+  doi = {10.24432/C59K5F},
+  url = {https://archive.ics.uci.edu/dataset/360/air+quality},
+  note = {Creator spelling follows the official dataset citation. Official page read on 2026-10-23: CO(GT) is a co-located reference-analyzer hourly concentration in mg/m3; missing values use -200. The linked introductory paper concerns benzene calibration, whereas this repository pilots CO calibration. Actual downloaded file dates, checksums, and provenance are recorded separately in the data manifest.}
+}

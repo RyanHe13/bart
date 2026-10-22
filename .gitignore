@@ -1,0 +1,18 @@
+# Regenerate from pinned sources; never commit observations or posterior chains.
+data/raw/
+data/processed/
+data/cache/
+data/snapshots/
+artifacts/
+.runtime/
+.venv/
+renv/library/
+renv/staging/
+renv/cache/
+.Rhistory
+.RData
+*.so
+*.o
+__pycache__/
+.pytest_cache/
+

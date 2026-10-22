@@ -1,0 +1,173 @@
+{
+  "platform": "Debian 13 x86_64",
+  "integrity": "Debian package hashes were obtained from apt-verified trixie InRelease and Packages metadata using the Debian archive keyring; GitHub source is pinned to an immutable CRAN mirror commit and SHA-256. TLS verification is required.",
+  "debian_packages": [
+    {
+      "package": "r-base-core",
+      "version": "4.5.0-3",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-base/r-base-core_4.5.0-3_amd64.deb",
+      "sha256": "6c529a906d2a26cf78e6c24eaa96e0bbd061b032e6c824f9a61e5f313353b155",
+      "file": "r-base-core_4.5.0-3_amd64.deb"
+    },
+    {
+      "package": "r-cran-abind",
+      "version": "1.4-8-1",
+      "url": "https://deb.debian.org/debian/pool/main/a/abind/r-cran-abind_1.4-8-1_all.deb",
+      "sha256": "f2547111d94ddf3818769a9539c89f1f61ff833805b72290639124bf353f025a",
+      "file": "r-cran-abind_1.4-8-1_all.deb"
+    },
+    {
+      "package": "r-cran-backports",
+      "version": "1.5.0-2",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-backports/r-cran-backports_1.5.0-2_amd64.deb",
+      "sha256": "9b87e94275c4605194c63eeea863c2a3532d6e0cc319e6ce96b5818720460b83",
+      "file": "r-cran-backports_1.5.0-2_amd64.deb"
+    },
+    {
+      "package": "r-cran-checkmate",
+      "version": "2.3.2-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-checkmate/r-cran-checkmate_2.3.2-1_amd64.deb",
+      "sha256": "0237669c06c0d3b93b41a15f015da834e9bd09f576b3d24573eeb16d35c223ac",
+      "file": "r-cran-checkmate_2.3.2-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-cli",
+      "version": "3.6.4-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-cli/r-cran-cli_3.6.4-1_amd64.deb",
+      "sha256": "450908eb7a288a32e76ce1171fb30b074912a3fc36b0f55a77fb714aa47767a1",
+      "file": "r-cran-cli_3.6.4-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-distributional",
+      "version": "0.5.0-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-distributional/r-cran-distributional_0.5.0-1_all.deb",
+      "sha256": "6d83f3659fed3395bd3b22cb2956e9be1389eced67b815e883d43697fe570b21",
+      "file": "r-cran-distributional_0.5.0-1_all.deb"
+    },
+    {
+      "package": "r-cran-fansi",
+      "version": "1.0.6-2",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-fansi/r-cran-fansi_1.0.6-2_amd64.deb",
+      "sha256": "2e3b9f091a2098e91c3ff7a7904eeebb8c41d13ad4f58ca36c11c1e2ac64b1bb",
+      "file": "r-cran-fansi_1.0.6-2_amd64.deb"
+    },
+    {
+      "package": "r-cran-generics",
+      "version": "0.1.3-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-generics/r-cran-generics_0.1.3-1_all.deb",
+      "sha256": "2aafe9864c4df3992f38db0febe62eae72dbfa8edeaed61f2c05e71a0697d2eb",
+      "file": "r-cran-generics_0.1.3-1_all.deb"
+    },
+    {
+      "package": "r-cran-glue",
+      "version": "1.8.0-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-glue/r-cran-glue_1.8.0-1_amd64.deb",
+      "sha256": "6364a9afeaae419b25af64c21d3344a06a6e914dca141e1b53310b096ba2f805",
+      "file": "r-cran-glue_1.8.0-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-jsonlite",
+      "version": "1.9.1+dfsg-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-jsonlite/r-cran-jsonlite_1.9.1+dfsg-1_amd64.deb",
+      "sha256": "79067ac129c78597a5673a2688a8bb0a1e02eefd1a3a092ec07b76e0e9d537d8",
+      "file": "r-cran-jsonlite_1.9.1+dfsg-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-lifecycle",
+      "version": "1.0.4+dfsg-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-lifecycle/r-cran-lifecycle_1.0.4+dfsg-1_all.deb",
+      "sha256": "390a4ebf40706ac071a24f81bc36bb3da24a08f1b5dede6022483051c8b38944",
+      "file": "r-cran-lifecycle_1.0.4+dfsg-1_all.deb"
+    },
+    {
+      "package": "r-cran-magrittr",
+      "version": "2.0.3-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-magrittr/r-cran-magrittr_2.0.3-1_amd64.deb",
+      "sha256": "70044d07379db701c8ebd0d0f16709638641913e5ed51b66cd915ad5e9747f20",
+      "file": "r-cran-magrittr_2.0.3-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-matrixstats",
+      "version": "1.5.0-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-matrixstats/r-cran-matrixstats_1.5.0-1_amd64.deb",
+      "sha256": "2ac949cca13b13cb7a89db996399b93f6320e0c82d279cb1ccc836c83c8bf544",
+      "file": "r-cran-matrixstats_1.5.0-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-numderiv",
+      "version": "2016.8-1.1-3",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-numderiv/r-cran-numderiv_2016.8-1.1-3_all.deb",
+      "sha256": "897161cabf8a1328d6ea4e342a6bbc8ab32eefb28eb8c7e5c4321814fba7fe91",
+      "file": "r-cran-numderiv_2016.8-1.1-3_all.deb"
+    },
+    {
+      "package": "r-cran-pillar",
+      "version": "1.10.1+dfsg-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-pillar/r-cran-pillar_1.10.1+dfsg-1_all.deb",
+      "sha256": "38f2f8295de963e25eb83ff2bb30cc14447e3dc4632ef95237b5150bea5abf6d",
+      "file": "r-cran-pillar_1.10.1+dfsg-1_all.deb"
+    },
+    {
+      "package": "r-cran-pkgconfig",
+      "version": "2.0.3-2",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-pkgconfig/r-cran-pkgconfig_2.0.3-2_all.deb",
+      "sha256": "216c55f07f52af65355c41ee92dd4a889ac71fe47e6b38a992e17ff55d6b5870",
+      "file": "r-cran-pkgconfig_2.0.3-2_all.deb"
+    },
+    {
+      "package": "r-cran-posterior",
+      "version": "1.6.1+dfsg-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-posterior/r-cran-posterior_1.6.1+dfsg-1_all.deb",
+      "sha256": "f22942f94d78e049df7c2c968f32df5f21ff84afa8459818c53e50b67444fe01",
+      "file": "r-cran-posterior_1.6.1+dfsg-1_all.deb"
+    },
+    {
+      "package": "r-cran-renv",
+      "version": "1.1.2-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-renv/r-cran-renv_1.1.2-1_amd64.deb",
+      "sha256": "1cde36a19428ab91819bd4080f74960c7b2de36bd40e72b94d600b199fcaa9c4",
+      "file": "r-cran-renv_1.1.2-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-rlang",
+      "version": "1.1.5-3",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-rlang/r-cran-rlang_1.1.5-3_amd64.deb",
+      "sha256": "93507928089288e338ac39895fe4482fe217ebe6b93103f11b102b7508890426",
+      "file": "r-cran-rlang_1.1.5-3_amd64.deb"
+    },
+    {
+      "package": "r-cran-tensora",
+      "version": "0.36.2.1-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-tensora/r-cran-tensora_0.36.2.1-1_amd64.deb",
+      "sha256": "8e9de66e6f343377dac61e1a3f097b7162fcf274a75b0283902e506289403005",
+      "file": "r-cran-tensora_0.36.2.1-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-tibble",
+      "version": "3.2.1+dfsg-3",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-tibble/r-cran-tibble_3.2.1+dfsg-3_amd64.deb",
+      "sha256": "ccbe25c2d2759eeafb0b3a7918b62e74aac0d52d3b71ffde966a09d276faeb44",
+      "file": "r-cran-tibble_3.2.1+dfsg-3_amd64.deb"
+    },
+    {
+      "package": "r-cran-utf8",
+      "version": "1.2.4-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-utf8/r-cran-utf8_1.2.4-1_amd64.deb",
+      "sha256": "6ff7270f823c04b0a9c77852d1896e837874e614b683edcd800bda3ab609f00c",
+      "file": "r-cran-utf8_1.2.4-1_amd64.deb"
+    },
+    {
+      "package": "r-cran-vctrs",
+      "version": "0.6.5-1",
+      "url": "https://deb.debian.org/debian/pool/main/r/r-cran-vctrs/r-cran-vctrs_0.6.5-1_amd64.deb",
+      "sha256": "695e25e0199719e282bed2e97e2bbd273f8c96aed6e4a52c1b2e43541f6d49ad",
+      "file": "r-cran-vctrs_0.6.5-1_amd64.deb"
+    }
+  ],
+  "dbarts": {
+    "version": "0.9-34",
+    "commit": "6049e75650e75121d4e7b3d7f1e923996129c0bb",
+    "url": "https://codeload.github.com/cran/dbarts/tar.gz/6049e75650e75121d4e7b3d7f1e923996129c0bb",
+    "sha256": "7190ff623c3e1520ad7bfa95f6bd5bb2a372aefee557d21970683c0987ebbc5a"
+  }
+}
