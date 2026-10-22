@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Use the pinned, unprivileged R runtime prepared by scripts/install.sh.
+set -euo pipefail
+export BART_RUNTIME="${BART_RUNTIME:-/workspace/.bart-runtime}"
+if [[ ! -x "$BART_RUNTIME/usr/bin/Rscript" ]]; then
+  printf '%s\n' 'R runtime missing. Run bash scripts/install.sh first.' >&2
+  exit 1
+fi
+export RHOME="$BART_RUNTIME/usr/lib/R"
+export R_HOME="$RHOME"
+export R_LIBS_USER="$BART_RUNTIME/library"
+export R_LIBS_SITE="$BART_RUNTIME/usr/lib/R/site-library"
+export RENV_PATHS_ROOT="$BART_RUNTIME/renv-cache"
+export R_ENVIRON_USER=/dev/null
+export R_PROFILE_USER=/dev/null
+export R_ENVIRON_SITE=/dev/null
+export R_PROFILE_SITE=/dev/null
+export PATH="$BART_RUNTIME/usr/bin:$PATH"
+exec "$BART_RUNTIME/usr/bin/Rscript" "$@"
