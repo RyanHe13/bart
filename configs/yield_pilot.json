@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "task": "yield",
+  "phase": "exploratory",
+  "seed": 20261023,
+  "control": {"chains": 2, "burn": 100, "draws": 100, "trees": 20},
+  "models": ["random_walk", "dns_var", "dns_linear", "dns_macro", "bart_two_stage", "bart_joint"],
+  "data": {"path": "data/processed/yield_monthly.csv", "features": ["macro_fedfunds", "macro_cumfns", "macro_inflation"], "capacity_series": "CUMFNS", "start": "1985-01-01"},
+  "evaluation": {"target_months": ["2006-01", "2012-01", "2019-01"], "confirmation_start": "2020-01-01"}
+}
