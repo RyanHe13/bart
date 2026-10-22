@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task": "simulation_air",
+  "phase": "exploratory",
+  "seed": 20261023,
+  "control": {
+    "chains": 4,
+    "burn": 5000,
+    "draws": 5000,
+    "trees": 200,
+    "rho": 0.99
+  },
+  "models": [
+    "bart_static",
+    "bart_joint"
+  ],
+  "simulation": {
+    "n": 480,
+    "train_n": 360,
+    "replicates": 1,
+    "scenarios": [
+      "drift",
+      "slow_covariates"
+    ]
+  },
+  "evaluation": {
+    "reference_every": 24
+  }
+}

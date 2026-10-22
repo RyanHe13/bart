@@ -34,6 +34,19 @@ def run_experiment(config_path, output=None):
     out = Path(output).resolve() if output else ROOT / "artifacts" / run_id
     out.mkdir(parents=True, exist_ok=False)
     (out / "config.json").write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n")
+    # Validate the source/compiler-keyed native cache before copying executable
+    # artifacts. An existing shared object alone does not prove source parity.
+    build_script = ROOT / "scripts" / "build_native.R"
+    if build_script.exists():
+        with (out / "native_build.log").open("w") as build_log:
+            build_result = subprocess.run([str(ROOT / "scripts" / "Rscript"), str(build_script)],
+                                          cwd=ROOT, stdout=build_log, stderr=subprocess.STDOUT)
+        if build_result.returncode:
+            (out / "metadata.json").write_text(json.dumps({"run_id": run_id, "status": "failed",
+                "exit_code": build_result.returncode, "error": "Native cache validation/build failed",
+                "config_sha256": digest(path), "git_commit": git("rev-parse", "HEAD")}, indent=2) + "\n")
+            print((out / "native_build.log").read_text(), file=sys.stderr)
+            return build_result.returncode
     manifest = ROOT / "data" / "sources.json"
     data_path = ROOT / config.get("data", {}).get("path", "__no_dataset__")
     tracked_diff = subprocess.run(["git", "diff", "HEAD", "--", "."], cwd=ROOT, capture_output=True).stdout
@@ -50,6 +63,20 @@ def run_experiment(config_path, output=None):
         (out / "source" / "native").mkdir(exist_ok=True)
         shutil.copy2(native_library, out / "source" / "native" / "bartssm.so")
         native_sha = digest(native_library)
+        for name in ("build-key.txt", "build/ssm_native.c"):
+            compiled_input = native_library.parent / name
+            if compiled_input.exists():
+                shutil.copy2(compiled_input, out / "source" / "native" / Path(name).name)
+        build_key = out / "source" / "native" / "build-key.txt"
+        snap_source = out / "source" / "src" / "ssm_native.c"
+        key_lines = build_key.read_text().splitlines() if build_key.exists() else []
+        snap_builder = out / "source" / "scripts" / "build_native.R"
+        stale_source = key_lines and snap_source.exists() and key_lines[0] != digest(snap_source)
+        stale_builder = len(key_lines) >= 2 and snap_builder.exists() and key_lines[1] != digest(snap_builder)
+        if stale_source or stale_builder:
+            (out / "metadata.json").write_text(json.dumps({"run_id": run_id, "status": "failed",
+                "exit_code": 1, "error": "Native source changed while snapshotting; retry after edits finish"}, indent=2) + "\n")
+            return 1
     executed_config = json.loads(json.dumps(config))
     if data_path.exists():
         shutil.copy2(data_path, out / "input.csv")

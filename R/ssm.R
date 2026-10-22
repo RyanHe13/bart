@@ -37,14 +37,15 @@
 
 .ssm_chol_solve <- function(ch, b) backsolve(ch, forwardsolve(t(ch), b))
 
-.ssm_draw <- function(mu, covariance) {
+.ssm_draw <- function(mu, covariance, normals = NULL) {
   covariance <- .ssm_sym(covariance)
+  if (is.null(normals)) normals <- rnorm(length(mu))
   ch <- tryCatch(chol(covariance), error = function(e) NULL)
-  if (!is.null(ch)) return(as.numeric(mu + t(ch) %*% rnorm(length(mu))))
+  if (!is.null(ch)) return(as.numeric(mu + t(ch) %*% normals))
   eig <- eigen(covariance, symmetric = TRUE)
   tolerance <- 1e-9 * max(1, max(abs(eig$values)))
   if (min(eig$values) < -tolerance) stop("Gaussian covariance is not positive semidefinite")
-  as.numeric(mu + eig$vectors %*% (sqrt(pmax(eig$values, 0)) * rnorm(length(mu))))
+  as.numeric(mu + eig$vectors %*% (sqrt(pmax(eig$values, 0)) * normals))
 }
 
 kalman_filter <- function(y, H, A, Q, R, state_offset = NULL,
@@ -66,6 +67,12 @@ kalman_filter <- function(y, H, A, Q, R, state_offset = NULL,
     coefficients <- vapply(list(H, A, Q, R), function(z) .ssm_matrix(z, 1L, 1L, "scalar coefficient")[1L], numeric(1))
     return(.Call("bart_ssm_scalar_filter", as.numeric(y), coefficients,
                  as.numeric(d), as.numeric(c), as.numeric(c(m0, P0)), PACKAGE = "bartssm"))
+  }
+  if (k > 1L && k <= 8L && !is.list(H) && !is.list(R) && .ssm_use_native() &&
+      is.loaded("bart_ssm_diagonal_filter", PACKAGE = "bartssm")) {
+    result <- .Call("bart_ssm_diagonal_filter", y, as.matrix(H), A, Q, as.matrix(R),
+                    d, c, as.numeric(m0), P0, PACKAGE = "bartssm")
+    if (!is.null(result)) return(result)
   }
   hs <- .ssm_series(H, p, k, n, "H")
   aa <- .ssm_series(A, k, k, n, "A")
@@ -150,14 +157,23 @@ ffbs_sample <- function(filter) {
     }
     return(draw)
   }
-  draw[n, ] <- .ssm_draw(filter$filtered_mean[n, ], matrix(filter$filtered_cov[, , n], k, k))
+  normals <- NULL
+  if (k <= 8L && .ssm_use_native() && is.loaded("bart_ssm_small_ffbs", PACKAGE = "bartssm")) {
+    normals <- matrix(rnorm(n * k), k, n)
+    accelerated <- .Call("bart_ssm_small_ffbs", filter$filtered_mean, filter$predicted_mean,
+                         filter$filtered_cov, filter$predicted_cov, filter$transitions,
+                         normals, PACKAGE = "bartssm")
+    if (!is.null(accelerated)) return(accelerated)
+  }
+  draw[n, ] <- .ssm_draw(filter$filtered_mean[n, ], matrix(filter$filtered_cov[, , n], k, k),
+                         if (!is.null(normals)) normals[, 1L])
   if (n > 1L) for (tt in seq.int(n - 1L, 1L)) {
     C <- matrix(filter$filtered_cov[, , tt], k, k)
     P <- matrix(filter$predicted_cov[, , tt + 1L], k, k)
     at <- matrix(filter$transitions[, , tt + 1L], k, k)
     J <- t(.ssm_chol_solve(chol(.ssm_sym(P)), at %*% C))
     mu <- filter$filtered_mean[tt, ] + as.numeric(J %*% (draw[tt + 1L, ] - filter$predicted_mean[tt + 1L, ]))
-    draw[tt, ] <- .ssm_draw(mu, C - J %*% P %*% t(J))
+    draw[tt, ] <- .ssm_draw(mu, C - J %*% P %*% t(J), if (!is.null(normals)) normals[, n - tt + 1L])
   }
   draw
 }

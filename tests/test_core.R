@@ -88,6 +88,68 @@ if (.ssm_native_loaded) {
   options(bart.native = native_original_option)
 }
 
+if (.ssm_native_loaded && is.loaded("bart_ssm_diagonal_filter", PACKAGE = "bartssm")) {
+  test_native_small <- function() {
+    previous_option <- getOption("bart.native")
+    on.exit(options(bart.native = previous_option), add = TRUE)
+    n <- 6L; k <- 3L; p <- 4L
+    H <- matrix(c(1, 1, 1, 1, .9, .6, .3, .1, .1, .3, .3, .1), p, k)
+    A <- c(list(diag(k)), rep(list(diag(c(.97, .84, .63))), n - 1L))
+    Q <- c(list(matrix(0, k, k)), rep(list(diag(c(.08, .12, .05))), n - 1L))
+    R <- diag(c(.1, .2, .08, .15)); m0 <- c(.3, -.2, .1)
+    P0 <- diag(c(.6, .4, .3)); P0[1, 2] <- P0[2, 1] <- .03
+    d <- matrix(seq_len(n * k) * .002, n, k)
+    cc <- matrix(seq_len(n * p) * -.001, n, p)
+    y <- matrix(sin(seq_len(n * p)) * .3, n, p)
+    y[2, 1] <- NA; y[3, ] <- NA; y[5, c(2, 4)] <- NA
+    options(bart.native = FALSE)
+    reference <- kalman_filter(y, H, A, Q, R, d, cc, m0, P0)
+    set.seed(917); reference_draw <- ffbs_sample(reference)
+    options(bart.native = TRUE)
+    accelerated <- kalman_filter(y, H, A, Q, R, d, cc, m0, P0)
+    set.seed(917); accelerated_draw <- ffbs_sample(accelerated)
+    for (field in names(reference)) assert_close(reference[[field]], accelerated[[field]], 2e-11, paste("Small-k", field))
+    assert_close(reference_draw, accelerated_draw, 2e-11, "Small-k FFBS path parity")
+    changed_y <- y; changed_y[5:6, ] <- 80
+    changed <- kalman_filter(changed_y, H, A, Q, R, d, cc, m0, P0)
+    assert_close(changed$filtered_mean[1:4, ], accelerated$filtered_mean[1:4, ], 1e-12, "Small-k filtering leakage")
+
+    # A second independent dense Gaussian calculation covers the specialized
+    # diagonal filter, including its first identity/zero-Q transition.
+    ix <- function(t) seq.int((t - 1L) * k + 1L, t * k)
+    mean_all <- matrix(0, n, k); cov_all <- matrix(0, n * k, n * k)
+    last_m <- m0; last_P <- P0
+    for (t in seq_len(n)) {
+      mean_all[t, ] <- A[[t]] %*% last_m + d[t, ]
+      cov_all[ix(t), ix(t)] <- A[[t]] %*% last_P %*% t(A[[t]]) + Q[[t]]
+      if (t > 1L) for (s in seq_len(t - 1L)) {
+        cov_all[ix(t), ix(s)] <- A[[t]] %*% cov_all[ix(t - 1L), ix(s)]
+        cov_all[ix(s), ix(t)] <- t(cov_all[ix(t), ix(s)])
+      }
+      last_m <- mean_all[t, ]; last_P <- cov_all[ix(t), ix(t)]
+    }
+    all_H <- kronecker(diag(n), H); all_R <- kronecker(diag(n), R)
+    yv <- as.vector(t(y)); cv <- as.vector(t(cc)); mv <- as.vector(t(mean_all))
+    seen <- which(!is.na(yv)); ho <- all_H[seen, , drop = FALSE]
+    S <- ho %*% cov_all %*% t(ho) + all_R[seen, seen, drop = FALSE]
+    G <- cov_all %*% t(ho) %*% solve(S)
+    exact_m <- mv + as.numeric(G %*% (yv[seen] - cv[seen] - ho %*% mv))
+    exact_P <- cov_all - G %*% ho %*% cov_all
+    set.seed(731)
+    simulated <- replicate(8000L, as.vector(t(ffbs_sample(accelerated))))
+    se <- sqrt(diag(exact_P) / ncol(simulated))
+    if (any(abs(rowMeans(simulated) - exact_m) > 6 * se + .002)) stop("Small-k dense conditional means disagree")
+    assert_close(cov(t(simulated)), exact_P, .025, "Small-k dense conditional covariance")
+
+    # Correlation is never rounded away by the native model guard.
+    non_diagonal <- A; non_diagonal[[2L]][1L, 2L] <- 1e-7
+    rejected <- .Call("bart_ssm_diagonal_filter", y, H, non_diagonal, Q, R,
+                       d, cc, m0, P0, PACKAGE = "bartssm")
+    stopifnot(is.null(rejected))
+  }
+  test_native_small()
+}
+
 # CRPS has an exact finite-sample pairwise definition; do not validate it only
 # against the same sorted-sample implementation.
 z <- c(-1, .2, 1.1, 2)
