@@ -114,3 +114,6 @@ cat("Pinned R runtime and dbarts smoke test passed.\\n")
 '''
 subprocess.run([str(root / 'usr/bin/Rscript'), '-e', verify, str(project / 'renv.lock')], env=env, check=True)
 PY
+if [[ -f "$project_dir/scripts/build_native.R" ]]; then
+  "$project_dir/scripts/Rscript" "$project_dir/scripts/build_native.R"
+fi

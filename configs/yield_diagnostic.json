@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "task": "yield",
+  "phase": "exploratory",
+  "seed": 20261023,
+  "control": {
+    "chains": 4,
+    "burn": 1000,
+    "draws": 1000,
+    "trees": 20
+  },
+  "models": [
+    "random_walk",
+    "dns_var",
+    "dns_linear",
+    "dns_macro",
+    "bart_two_stage",
+    "bart_joint"
+  ],
+  "data": {
+    "path": "data/processed/yield_monthly.csv",
+    "features": [
+      "macro_fedfunds",
+      "macro_tcu",
+      "macro_inflation"
+    ],
+    "capacity_series": "TCU",
+    "start": "1985-01-01"
+  },
+  "evaluation": {
+    "target_months": [
+      "2019-01"
+    ],
+    "confirmation_start": "2020-01-01"
+  }
+}

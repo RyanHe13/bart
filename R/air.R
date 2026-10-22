@@ -256,33 +256,36 @@ predict_air_online <- function(fit, y_test, reference_allowed = rep(FALSE, lengt
   allowed <- as.logical(reference_allowed) & is.finite(y_test) & fit$test_valid
   sample_count <- ncol(fit$f_test)
   predictive <- matrix(NA_real_, n, sample_count)
-  component_means <- matrix(NA_real_, n, sample_count)
-  component_variances <- matrix(NA_real_, n, sample_count)
+  means <- variances <- rep(NA_real_, n)
+  rho <- fit$params[, "rho"]
+  q <- fit$params[, "q"]
+  r <- fit$params[, "r"]
+  m <- fit$terminal[, "mean"]
+  P <- fit$terminal[, "variance"]
   set.seed(seed)
-  for (s in seq_len(sample_count)) {
-    rho <- fit$params[s, "rho"]
-    q <- fit$params[s, "q"]
-    r <- fit$params[s, "r"]
-    m <- fit$terminal[s, "mean"]
-    P <- fit$terminal[s, "variance"]
-    for (t in seq_len(n)) {
-      m <- rho * m
-      P <- rho^2 * P + q
-      f <- fit$f_test[t, s]
-      if (is.finite(f)) {
-        component_means[t, s] <- f + m
-        component_variances[t, s] <- P + r
-        predictive[t, s] <- stats::rnorm(1L, f + m, sqrt(P + r))
-        if (allowed[t]) {
-          K <- P / (P + r)
-          m <- m + K * (y_test[t] - f - m)
-          P <- (1 - K) * P
-        }
+  # Vectorize posterior samples, keeping each sample's f/parameters/state
+  # paired. RNG consumption is time-major; this source version is recorded in
+  # each run manifest, and identical seeds reproduce this implementation.
+  for (t in seq_len(n)) {
+    m <- rho * m
+    P <- rho^2 * P + q
+    f <- fit$f_test[t, ]
+    valid <- which(is.finite(f))
+    if (length(valid)) {
+      mu <- f[valid] + m[valid]
+      variance <- P[valid] + r[valid]
+      predictive[t, valid] <- stats::rnorm(length(valid), mu, sqrt(variance))
+      if (length(valid) == sample_count) {
+        means[t] <- mean(mu)
+        variances[t] <- mean(variance) + mean((mu - means[t])^2)
+      }
+      if (allowed[t]) {
+        K <- P[valid] / (P[valid] + r[valid])
+        m[valid] <- m[valid] + K * (y_test[t] - f[valid] - m[valid])
+        P[valid] <- (1 - K) * P[valid]
       }
     }
   }
-  means <- rowMeans(component_means)
-  variances <- rowMeans(component_variances + component_means^2) - means^2
   list(draws = predictive, mean = means, variance = pmax(variances, 0),
        reference_used = allowed, valid = fit$test_valid,
        interpretation = fit$inference)

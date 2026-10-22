@@ -22,3 +22,7 @@ Installation is repeatable: matching installed artifacts are retained, and each 
 checks all locked package versions and runs a small dbarts fit. No project-wide
 automatic `.Rprofile` activation is used; the wrapper explicitly selects the pinned
 library and avoids unrelated user/site startup files.
+
+When `scripts/build_native.R` is present, installation also invokes it with the
+pinned runtime to prepare the project's native numerical helper. The helper uses
+R's existing C toolchain and adds no R package dependencies.

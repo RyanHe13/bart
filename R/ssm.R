@@ -2,6 +2,16 @@
 # produces x_t, followed by observation y_t. Missing observation components
 # are integrated out, never filled with future observations.
 
+.ssm_native_load <- function() {
+  if (is.loaded("bart_ssm_scalar_filter", PACKAGE = "bartssm")) return(TRUE)
+  path <- getOption("bart.native.path", file.path("artifacts", "native", paste0("bartssm", .Platform$dynlib.ext)))
+  if (!file.exists(path)) return(FALSE)
+  tryCatch({ dyn.load(path); is.loaded("bart_ssm_scalar_filter", PACKAGE = "bartssm") },
+           error = function(e) { warning("Native SSM unavailable; using R fallback: ", conditionMessage(e)); FALSE })
+}
+.ssm_native_loaded <- .ssm_native_load()
+.ssm_use_native <- function() isTRUE(getOption("bart.native", TRUE)) && .ssm_native_loaded
+
 .ssm_sym <- function(x) (x + t(x)) / 2
 
 .ssm_matrix <- function(x, nr, nc, name) {
@@ -52,6 +62,11 @@ kalman_filter <- function(y, H, A, Q, R, state_offset = NULL,
   c <- .ssm_offset(observation_offset, n, p, "observation_offset")
   scalar <- p == 1L && k == 1L &&
     !any(vapply(list(H, A, Q, R), is.list, logical(1)))
+  if (scalar && .ssm_use_native()) {
+    coefficients <- vapply(list(H, A, Q, R), function(z) .ssm_matrix(z, 1L, 1L, "scalar coefficient")[1L], numeric(1))
+    return(.Call("bart_ssm_scalar_filter", as.numeric(y), coefficients,
+                 as.numeric(d), as.numeric(c), as.numeric(c(m0, P0)), PACKAGE = "bartssm"))
+  }
   hs <- .ssm_series(H, p, k, n, "H")
   aa <- .ssm_series(A, k, k, n, "A")
   qq <- .ssm_series(Q, k, k, n, "Q")
@@ -118,6 +133,11 @@ ffbs_sample <- function(filter) {
   draw <- matrix(NA_real_, n, k)
   if (k == 1L) {
     z <- rnorm(n)
+    if (.ssm_use_native()) {
+      return(.Call("bart_ssm_scalar_ffbs", filter$filtered_mean, filter$predicted_mean,
+                   filter$filtered_cov, filter$predicted_cov, filter$transitions, z,
+                   PACKAGE = "bartssm"))
+    }
     draw[n, 1L] <- filter$filtered_mean[n, 1L] + sqrt(max(0, filter$filtered_cov[1L, 1L, n])) * z[n]
     if (n > 1L) for (tt in seq.int(n - 1L, 1L)) {
       P <- filter$predicted_cov[1L, 1L, tt + 1L]

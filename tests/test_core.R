@@ -61,6 +61,33 @@ assert_close(fast$filtered_mean, slow$filtered_mean, 1e-12, "Scalar filter means
 assert_close(fast$filtered_cov, slow$filtered_cov, 1e-12, "Scalar filter covariance")
 assert_close(fast$log_lik, slow$log_lik, 1e-12, "Scalar filter likelihood")
 
+if (.ssm_native_loaded) {
+  # Exercise the actual native dispatch against both the independent matrix
+  # implementation above and the preserved R scalar implementation. Random
+  # normals have identical ordering, so paths can be compared directly.
+  native_original_option <- getOption("bart.native")
+  native_y <- matrix(c(.2, NA, -.4, .3, NA, NA, .1), ncol = 1L)
+  native_d <- matrix(seq_len(7) * .02, ncol = 1L)
+  native_c <- matrix(seq_len(7) * -.01, ncol = 1L)
+  options(bart.native = FALSE)
+  reference <- kalman_filter(native_y, matrix(.8), matrix(.94), matrix(.03), matrix(.2),
+                              native_d, native_c, m0 = .3, P0 = matrix(.5))
+  set.seed(165); reference_draw <- ffbs_sample(reference)
+  options(bart.native = TRUE)
+  accelerated <- kalman_filter(native_y, matrix(.8), matrix(.94), matrix(.03), matrix(.2),
+                                native_d, native_c, m0 = .3, P0 = matrix(.5))
+  set.seed(165); accelerated_draw <- ffbs_sample(accelerated)
+  for (field in names(reference)) assert_close(reference[[field]], accelerated[[field]], 1e-12, paste("Native scalar", field))
+  assert_close(reference_draw, accelerated_draw, 1e-12, "Native FFBS RNG/path parity")
+  native_future <- native_y; native_future[6:7, 1L] <- 90
+  native_changed <- kalman_filter(native_future, matrix(.8), matrix(.94), matrix(.03), matrix(.2),
+                                   native_d, native_c, m0 = .3, P0 = matrix(.5))
+  assert_close(accelerated$filtered_mean[1:5, ], native_changed$filtered_mean[1:5, ], 1e-12, "Native no future leakage")
+  native_missing <- kalman_filter(matrix(NA_real_, 7L, 1L), matrix(1), matrix(.9), matrix(.1), matrix(.3), m0 = .4, P0 = matrix(.2))
+  assert_close(native_missing$filtered_mean[, 1L], .4 * .9^seq_len(7L), 1e-12, "Native all-missing propagation")
+  options(bart.native = native_original_option)
+}
+
 # CRPS has an exact finite-sample pairwise definition; do not validate it only
 # against the same sorted-sample implementation.
 z <- c(-1, .2, 1.1, 2)

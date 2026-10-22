@@ -5,7 +5,13 @@ if (length(args) != 2L) stop("Usage: scripts/Rscript scripts/experiment.R CONFIG
 config <- jsonlite::fromJSON(args[1], simplifyVector = TRUE)
 out <- normalizePath(args[2], mustWork = TRUE)
 if (!identical(config$phase, "exploratory")) stop("Confirmation data is sealed in this runner")
-for (f in c("ssm", "bart_adapter", "metrics", "evaluation", "yield", "air")) source(paste0("R/", f, ".R"))
+# Rscript parses its file incrementally. Execute immutable per-run copies so
+# concurrent research edits cannot alter the running driver or sourced models.
+script_arg <- grep("^--file=", commandArgs(), value = TRUE)[1L]
+source_root <- dirname(dirname(normalizePath(sub("^--file=", "", script_arg))))
+Sys.setenv(BART_SOURCE_ROOT = source_root)
+options(bart.native.path = file.path(source_root, "native", paste0("bartssm", .Platform$dynlib.ext)))
+for (f in c("ssm", "bart_adapter", "metrics", "evaluation", "yield", "air")) source(file.path(source_root, "R", paste0(f, ".R")))
 options(warn = 1)
 writeLines(capture.output(sessionInfo()), file.path(out, "session_info.txt"))
 scores <- list(); diagnostics <- list(); prediction_rows <- list(); failures <- list()
@@ -112,7 +118,8 @@ if (config$task == "yield") {
 } else if (config$task == "simulation_yield") {
   s <- config$simulation
   for (scenario in s$scenarios) for (noise in s$noise) for (rep in seq_len(s$replicates)) {
-    seed <- config$seed + rep + 100L * match(scenario, s$scenarios) + 1000L * match(noise, s$noise)
+    # Common random numbers isolate the effect of measurement-noise magnitude.
+    seed <- config$seed + rep + 100L * match(scenario, s$scenarios)
     generated <- simulate_yield(n = s$n, scenario = scenario, noise = noise, seed = seed)
     case <- paste(scenario, noise, rep, sep = "_")
     saveRDS(generated, file.path(out, "fits", paste0(case, "-truth.rds")))

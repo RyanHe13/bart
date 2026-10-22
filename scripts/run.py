@@ -37,17 +37,29 @@ def run_experiment(config_path, output=None):
     manifest = ROOT / "data" / "sources.json"
     data_path = ROOT / config.get("data", {}).get("path", "__no_dataset__")
     tracked_diff = subprocess.run(["git", "diff", "HEAD", "--", "."], cwd=ROOT, capture_output=True).stdout
-    source_hashes = {str(p.relative_to(ROOT)): digest(p) for dirname in ("R", "scripts")
+    source_hashes = {str(p.relative_to(ROOT)): digest(p) for dirname in ("R", "scripts", "src")
                      for p in sorted((ROOT / dirname).glob("*")) if p.is_file()}
     for relative in source_hashes:
         destination = out / "source" / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / relative, destination)
     (out / "tracked_changes.diff").write_bytes(tracked_diff)
+    native_library = ROOT / "artifacts" / "native" / "bartssm.so"
+    native_sha = None
+    if native_library.exists():
+        (out / "source" / "native").mkdir(exist_ok=True)
+        shutil.copy2(native_library, out / "source" / "native" / "bartssm.so")
+        native_sha = digest(native_library)
+    executed_config = json.loads(json.dumps(config))
+    if data_path.exists():
+        shutil.copy2(data_path, out / "input.csv")
+        executed_config["data"]["path"] = str(out / "input.csv")
+    (out / "executed_config.json").write_text(json.dumps(executed_config, ensure_ascii=False, indent=2) + "\n")
     meta = {"run_id": run_id, "started_at": stamp, "status": "running", "config_sha256": digest(path),
             "git_commit": git("rev-parse", "HEAD"), "git_branch": git("branch", "--show-current"),
             "git_status": git("status", "--porcelain"), "tracked_diff_sha256": hashlib.sha256(tracked_diff).hexdigest(),
             "source_sha256": source_hashes, "seed": config["seed"], "phase": config["phase"],
+            "native_binary_sha256": native_sha,
             "data_sha256": digest(data_path) if data_path.exists() else None,
             "source_manifest_sha256": digest(manifest) if manifest.exists() else None}
     if manifest.exists():
@@ -58,8 +70,8 @@ def run_experiment(config_path, output=None):
         meta["processed_manifest_sha256"] = digest(processed_manifest)
     metadata_path = out / "metadata.json"
     metadata_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
-    command = [str(ROOT / "scripts" / "Rscript"), str(ROOT / "scripts" / "experiment.R"),
-               str(out / "config.json"), str(out)]
+    command = [str(out / "source" / "scripts" / "Rscript"), str(out / "source" / "scripts" / "experiment.R"),
+               str(out / "executed_config.json"), str(out)]
     start = time.monotonic()
     print(f"Run directory: {out}", flush=True)
     try:
@@ -67,7 +79,7 @@ def run_experiment(config_path, output=None):
             result = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
         meta["exit_code"] = result.returncode
         meta["status"] = "completed" if result.returncode == 0 else "failed"
-    except Exception as exc:
+    except (Exception, KeyboardInterrupt) as exc:
         meta["status"] = "failed"
         meta["error"] = str(exc)
         meta["exit_code"] = 1
