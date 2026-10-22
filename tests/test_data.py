@@ -36,20 +36,27 @@ class DataPreparationTests(unittest.TestCase):
             date(1984, 12, 1): {"FEDFUNDS": 999, "CUMFNS": 999, "CPIAUCSL": 999},
             date(1985, 1, 1): {"FEDFUNDS": 999, "CUMFNS": 999, "CPIAUCSL": 999},
         }
-        row = data.build_yield_rows(gsw, macro, target, target)[0]
+        row = data.build_yield_rows(gsw, macro, target, target, capacity_series="CUMFNS")[0]
         self.assertEqual(row["macro_observed_month"], "1984-11-01")
         self.assertEqual(row["macro_fedfunds"], 7)
         self.assertEqual(row["capacity_series"], "CUMFNS")
         self.assertAlmostEqual(row["macro_inflation"], 100 * math.log(1.1))
         macro[date(1984, 11, 1)]["FEDFUNDS"] = None
         with self.assertRaisesRegex(ValueError, "no forward fill"):
-            data.build_yield_rows(gsw, macro, target, target)
+            data.build_yield_rows(gsw, macro, target, target, capacity_series="CUMFNS")
 
     def test_transform_codes_are_not_observations(self):
         source = b"sasdate,FEDFUNDS,CUMFNS,CPIAUCSL\nTransform:,2,2,6\n11/1/1984,7,80,110\n"
-        rows = data.parse_macro(source)
+        rows = data.parse_macro(source, capacity_series="CUMFNS")
         self.assertEqual(list(rows), [date(1984, 11, 1)])
         self.assertEqual(rows[date(1984, 11, 1)]["CPIAUCSL"], 110)
+
+    def test_canonical_tcu_cannot_silently_use_manufacturing_series(self):
+        source = b"observation_date,TCU,FEDFUNDS,CPIAUCSL\n1984-11-01,81,7,110\n"
+        rows = data.parse_macro(source)
+        self.assertEqual(rows[date(1984, 11, 1)]["TCU"], 81)
+        with self.assertRaisesRegex(ValueError, "CUMFNS"):
+            data.parse_macro(source, capacity_series="CUMFNS")
 
     def test_air_preserves_missing_hour_and_assigns_time_split(self):
         header = "Date;Time;" + ";".join(data.AIR_COLUMNS)

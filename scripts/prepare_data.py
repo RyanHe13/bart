@@ -73,20 +73,25 @@ def fetch_source(source: dict, raw_dir: Path, offline: bool = False,
             "source_id": source["id"], "retrieval": "verified_existing_cache",
             "downloaded_from": None, "sha256": source["sha256"],
         }
+        metadata["source_id"] = source["id"]
         metadata["cache_verified"] = True
         return payload, metadata
     if offline:
         raise FileNotFoundError(f"Offline snapshot unavailable: {path}")
 
     candidates = []
-    if prefer_official:
+    official_only = source["download_url"] == source["official_url"]
+    if prefer_official or official_only:
         candidates.append((source["official_url"], True))
-    candidates.append((source["download_url"], False))
+    if not official_only:
+        candidates.append((source["download_url"], False))
     failures = []
     for url, official in candidates:
         try:
             # urllib's default SSL context verifies certificates and hostnames.
-            with urllib.request.urlopen(url, timeout=60) as response:
+            # The Fed's public download endpoint rejects urllib's default UA.
+            request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(request, timeout=60) as response:
                 payload = response.read()
             if official and source.get("official_format") == "zip":
                 with zipfile.ZipFile(io.BytesIO(payload)) as archive:
@@ -112,7 +117,9 @@ def fetch_source(source: dict, raw_dir: Path, offline: bool = False,
         except (OSError, ValueError, zipfile.BadZipFile) as error:
             failures.append({"url": url, "error": str(error)})
             print(f"{source['id']}: {error}", file=sys.stderr)
-    raise RuntimeError(f"All verified download candidates failed for {source['id']}: {failures}")
+    raise RuntimeError(f"All verified download candidates failed for {source['id']}: {failures}. "
+                       "Use the retained offline snapshot, or explicitly review and pin a new source vintage; "
+                       "checksums and the canonical TCU series are never replaced automatically.")
 
 
 def parse_gsw(payload: bytes) -> dict[date, dict]:
@@ -140,26 +147,31 @@ def parse_gsw(payload: bytes) -> dict[date, dict]:
     return monthly
 
 
-def parse_macro(payload: bytes) -> dict[date, dict]:
+def parse_macro(payload: bytes, capacity_series: str = "TCU") -> dict[date, dict]:
     reader = csv.DictReader(io.StringIO(payload.decode("utf-8-sig")))
-    required = {"sasdate", "FEDFUNDS", "CUMFNS", "CPIAUCSL"}
+    date_field = "observation_date" if "observation_date" in (reader.fieldnames or []) else "sasdate"
+    required = {date_field, "FEDFUNDS", capacity_series, "CPIAUCSL"}
     if not required.issubset(reader.fieldnames or []):
-        raise ValueError("FRED-MD must contain raw FEDFUNDS, CUMFNS and CPIAUCSL")
+        raise ValueError(f"Macro snapshot must contain raw FEDFUNDS, {capacity_series} and CPIAUCSL")
     observations = {}
     for row in reader:
-        if not row["sasdate"] or row["sasdate"].strip().lower().startswith("transform"):
+        if not row[date_field] or row[date_field].strip().lower().startswith("transform"):
             continue
-        month = datetime.strptime(row["sasdate"], "%m/%d/%Y").date().replace(day=1)
+        month = (date.fromisoformat(row[date_field]) if date_field == "observation_date"
+                 else datetime.strptime(row[date_field], "%m/%d/%Y").date()).replace(day=1)
         if month in observations:
             raise ValueError(f"Duplicate macro month: {month}")
         observations[month] = {column: numeric(row[column])
-                               for column in ["FEDFUNDS", "CUMFNS", "CPIAUCSL"]}
+                               for column in ["FEDFUNDS", capacity_series, "CPIAUCSL"]}
     return observations
 
 
 def build_yield_rows(gsw: dict[date, dict], macro: dict[date, dict],
                      start: date = date(1985, 1, 1),
-                     end: date = date(2024, 12, 1)) -> list[dict]:
+                     end: date = date(2024, 12, 1),
+                     capacity_series: str = "TCU") -> list[dict]:
+    if capacity_series not in {"TCU", "CUMFNS"}:
+        raise ValueError("Capacity series must be explicitly TCU or CUMFNS")
     rows = []
     month = start.replace(day=1)
     while month <= end:
@@ -168,7 +180,7 @@ def build_yield_rows(gsw: dict[date, dict], macro: dict[date, dict],
         if month not in gsw or macro_month not in macro or annual_base not in macro:
             raise ValueError(f"Missing required calendar observation for target {month}")
         current, past = macro[macro_month], macro[annual_base]
-        if any(current.get(c) is None for c in ["FEDFUNDS", "CUMFNS", "CPIAUCSL"]) or past.get("CPIAUCSL") is None:
+        if any(current.get(c) is None for c in ["FEDFUNDS", capacity_series, "CPIAUCSL"]) or past.get("CPIAUCSL") is None:
             raise ValueError(f"Missing macro input for target {month}; no forward fill is permitted")
         if current["CPIAUCSL"] <= 0 or past["CPIAUCSL"] <= 0:
             raise ValueError("CPI must be positive for log inflation")
@@ -178,10 +190,10 @@ def build_yield_rows(gsw: dict[date, dict], macro: dict[date, dict],
             **{column: gsw[month][column] for column in YIELD_COLUMNS},
             "macro_observed_month": macro_month.isoformat(),
             "macro_fedfunds": current["FEDFUNDS"],
-            "macro_cumfns": current["CUMFNS"],
-            "macro_capacity": current["CUMFNS"],
+            "macro_" + capacity_series.lower(): current[capacity_series],
+            "macro_capacity": current[capacity_series],
             "macro_inflation": 100 * math.log(current["CPIAUCSL"] / past["CPIAUCSL"]),
-            "capacity_series": "CUMFNS",
+            "capacity_series": capacity_series,
             "split": "train" if month.year < 2005 else "validation" if month.year < 2020 else "confirmation",
         }
         rows.append(row)
@@ -231,6 +243,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", choices=["all", "yield", "air"], default="all")
     parser.add_argument("--offline", action="store_true", help="Use only checksum-verified local raw snapshots")
+    parser.add_argument("--yield-variant", choices=["canonical", "mirror"], default="canonical",
+                        help="Default: official GSW + FRED TCU. Mirror writes a separate explicitly named CUMFNS variant.")
     parser.add_argument("--prefer-official", action=argparse.BooleanOptionalAction, default=True,
                         help="Try official sources before locked mirrors; never change checksums automatically")
     parser.add_argument("--data-root", type=Path, default=ROOT / "data")
@@ -242,6 +256,9 @@ def main(argv: list[str] | None = None) -> int:
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {
         "schema_version": 1, "sources": {}, "datasets": {},
     }
+    # Historical manifests are retained in snapshots; remove retired identifiers
+    # rather than implying they are the active canonical source.
+    manifest["sources"] = {key: value for key, value in manifest["sources"].items() if key in sources}
     manifest["source_registry_sha256"] = sha256((ROOT / "data" / "sources.json").read_bytes())
     manifest["canonical_yield_design"] = registry["canonical_yield_design"]
 
@@ -251,18 +268,27 @@ def main(argv: list[str] | None = None) -> int:
         return payload
 
     if args.dataset in {"all", "yield"}:
-        rows = build_yield_rows(parse_gsw(obtain("gsw")), parse_macro(obtain("fred_md")))
-        details = write_csv(processed_dir / "yield_monthly.csv", rows)
+        canonical = args.yield_variant == "canonical"
+        capacity = "TCU" if canonical else "CUMFNS"
+        rows = build_yield_rows(parse_gsw(obtain("gsw" if canonical else "gsw_mirror")),
+                                parse_macro(obtain("fred_official" if canonical else "fred_md_mirror"), capacity),
+                                capacity_series=capacity)
+        filename = "yield_monthly.csv" if canonical else "yield_monthly_mirror.csv"
+        dataset_key = "yield" if canonical else "yield_mirror"
+        details = write_csv(processed_dir / filename, rows)
         details.update({"first": rows[0]["date"], "last": rows[-1]["date"],
-                        "macro_lag_months": 2, "capacity_series": "CUMFNS",
+                        "macro_lag_months": 2, "capacity_series": capacity,
+                        "variant": args.yield_variant,
+                        "source_ids": ["gsw", "fred_official"] if canonical else ["gsw_mirror", "fred_md_mirror"],
                         "status": "exploratory_revised_vintage_pseudo_out_of_sample",
                         "confirmation": "2020-01 through 2024-12: prepared but not authorized for adaptive model selection"})
-        manifest["datasets"]["yield"] = details
-        print(json.dumps({"dataset": "yield", **details}))
+        manifest["datasets"][dataset_key] = details
+        print(json.dumps({"dataset": dataset_key, **details}))
     if args.dataset in {"all", "air"}:
         rows = parse_air(obtain("air_quality"))
         details = write_csv(processed_dir / "air_quality.csv", rows)
         details.update({"first": rows[0]["timestamp"], "last": rows[-1]["timestamp"],
+                        "source_ids": ["air_quality"],
                         "missing_CO": sum(r["CO"] is None for r in rows),
                         "missing_encoding": "empty CSV fields; original -200 sentinel converted to missing",
                         "timezone": "not specified by source; naive timestamps retained",

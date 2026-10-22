@@ -1,50 +1,67 @@
 {
   "schema_version": 1,
-  "purpose": "Immutable exploratory data snapshots. GSW/FRED official retrieval was blocked during setup; the UCI official ZIP subsequently worked and matched the locked CSV checksum. Raw files and processed data are not committed.",
+  "purpose": "Immutable official data snapshots for the canonical experiment. Earlier mirror/CUMFNS pilot data remain preserved in data/snapshots/pilot-mirror and are available only through an explicit mirror variant. Raw and processed data are excluded from Git.",
   "canonical_yield_design": {
-    "yield_series": ["SVENY01", "SVENY02", "SVENY03", "SVENY05", "SVENY07", "SVENY10"],
-    "macro_series": ["FEDFUNDS", "TCU", "CPIAUCSL"],
-    "macro_url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=FEDFUNDS,TCU,CPIAUCSL",
-    "active_capacity_series": "CUMFNS",
-    "deviation": "The exploratory fallback uses manufacturing capacity utilization CUMFNS, not total-industry TCU. The two series are not treated as interchangeable. Canonical TCU data remain pending official access.",
+    "yield_series": [
+      "SVENY01",
+      "SVENY02",
+      "SVENY03",
+      "SVENY05",
+      "SVENY07",
+      "SVENY10"
+    ],
+    "macro_series": [
+      "FEDFUNDS",
+      "TCU",
+      "CPIAUCSL"
+    ],
+    "macro_url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=TCU,FEDFUNDS,CPIAUCSL",
+    "active_capacity_series": "TCU",
+    "deviation": "None in the default canonical variant. The explicit mirror variant uses manufacturing CUMFNS instead of total-industry TCU and must not be pooled with canonical results.",
     "information_set": "For target month t, use macro observations dated t-2. Inflation is 100 * log(CPI[t-2] / CPI[t-14]). These are revised vintage data, not historical real-time releases."
   },
   "sources": [
     {
       "id": "gsw",
-      "filename": "gsw.csv",
+      "filename": "gsw_official_2026_10.csv",
       "official_url": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv",
       "official_format": "csv",
-      "download_url": "https://raw.githubusercontent.com/benz3927/forward-spread/f9e3730edf953fd6c05f16aae68b3130bc64b6f6/feds200628.csv",
-      "repository": "https://github.com/benz3927/forward-spread",
-      "commit": "f9e3730edf953fd6c05f16aae68b3130bc64b6f6",
-      "sha256": "e7698724dc93f1e1bb439ffd4608c5fc69b6a5499ed43328c1aadf6cb5a0c790",
-      "bytes": 16465703,
-      "coverage": ["1961-06-14", "2025-10-10"],
+      "download_url": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv",
+      "sha256": "59a802aa6f1661c3beb37a7880706627db2913601920e3be3c3dcdd6b5321278",
+      "bytes": 16661023,
+      "coverage": ["1961-06-14", "2026-10-16"],
       "attribution": "Gurkaynak, Sack and Wright, The U.S. Treasury yield curve: 1961 to the present; Federal Reserve Board research data.",
       "documentation_url": "https://www.federalreserve.gov/data/nominal-yield-curve.htm",
       "units": "SVENYxx are annualized percentage points, continuously compounded zero-coupon yields; xx is maturity in years. Do not use SVENPYxx par yields.",
-      "license_note": "Public Federal Reserve research product; live official terms were inaccessible during setup. This third-party snapshot has not been checksum-matched to the official source. Raw data are excluded from Git.",
-      "revision_note": "Staff research product subject to revision and methodological change; the vintage is frozen by commit and checksum."
+      "license_note": "Retrieved directly from the official Federal Reserve research-data endpoint with verified TLS. Attribution retained; underlying source terms apply. Raw data are excluded from Git.",
+      "revision_note": "Official current research-data payload, frozen by checksum. This remains revised historical data, not a historical real-time vintage archive.",
+      "role": "canonical",
+      "vintage": "Official endpoint payload retrieved 2026-10-23 Asia/Shanghai; SHA-256 freezes the exact bytes"
     },
     {
-      "id": "fred_md",
-      "filename": "fred_md_2026_09.csv",
-      "official_url": "https://www.stlouisfed.org/-/media/project/frbstl/stlouisfed/research/fred-md/monthly/2026-09-md.csv",
+      "id": "fred_official",
+      "filename": "fred_official_2026_10.csv",
+      "official_url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=TCU,FEDFUNDS,CPIAUCSL",
       "official_format": "csv",
-      "download_url": "https://raw.githubusercontent.com/davidemascioli/macroeconomic-factor-forecasting/00e60e3fbb0b235a79eaadd3c90a76b2b09b77cb/2026-09-MD.csv",
-      "repository": "https://github.com/davidemascioli/macroeconomic-factor-forecasting",
-      "commit": "00e60e3fbb0b235a79eaadd3c90a76b2b09b77cb",
-      "sha256": "d6e239038afbdbf4667c2a63c13c942817bc196fedab4355cd7e0d353ecdd65d",
-      "bytes": 669656,
-      "coverage": ["1959-01", "2026-08"],
-      "vintage": "2026-09",
-      "selected_series": ["FEDFUNDS", "CUMFNS", "CPIAUCSL"],
-      "attribution": "McCracken and Ng, FRED-MD: A Monthly Database for Macroeconomic Research; Federal Reserve Bank of St. Louis. Snapshot mirrored by Davide Mascioli.",
-      "documentation_url": "https://github.com/davidemascioli/macroeconomic-factor-forecasting/blob/00e60e3fbb0b235a79eaadd3c90a76b2b09b77cb/README.md",
-      "units": "FEDFUNDS and CUMFNS are percent; CPIAUCSL is the seasonally adjusted CPI index. The FRED-MD Transform row is metadata and must not be parsed as an observation.",
-      "license_note": "Underlying series retain source terms; a mirror's code license does not relicense data. Live official source terms were inaccessible. Raw data are excluded from Git.",
-      "revision_note": "September 2026 revised vintage, not real-time observations available at past forecast origins."
+      "download_url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=TCU,FEDFUNDS,CPIAUCSL",
+      "sha256": "bca37c56b27679224e565880a9bf50817ad6de45dc9ed20b393e4f112eba3cd4",
+      "bytes": 28238,
+      "coverage": [
+        "1947-01",
+        "2026-09"
+      ],
+      "selected_series": [
+        "TCU",
+        "FEDFUNDS",
+        "CPIAUCSL"
+      ],
+      "role": "canonical",
+      "vintage": "Official FRED endpoint payload retrieved 2026-10-23 Asia/Shanghai; SHA-256 freezes the exact bytes",
+      "attribution": "FRED, Federal Reserve Bank of St. Louis. TCU: Board of Governors total-industry capacity utilization; FEDFUNDS: effective federal funds rate; CPIAUCSL: BLS seasonally adjusted CPI.",
+      "documentation_url": "https://fred.stlouisfed.org/",
+      "units": "TCU is total-industry capacity utilization in percent, FEDFUNDS is percent, CPIAUCSL is an index. TCU is not manufacturing-only CUMFNS.",
+      "license_note": "Retrieved directly from official FRED with verified TLS. Underlying series retain source terms; source attribution retained and raw data excluded from Git.",
+      "revision_note": "Current revised series; two-month observation lag does not reconstruct historical release vintages."
     },
     {
       "id": "air_quality",
@@ -57,13 +74,64 @@
       "commit": "7590c65e5e55c669dfbbf7411107650a08f4d435",
       "sha256": "13277ae5d8581e80b7be09d47c7d3d06fe9b8e957078f2cf6e859f955e62f996",
       "bytes": 785065,
-      "coverage": ["2004-03-10T18:00:00", "2005-04-04T14:00:00"],
+      "coverage": [
+        "2004-03-10T18:00:00",
+        "2005-04-04T14:00:00"
+      ],
       "attribution": "Vito, S. (2008). Air Quality [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C59K5F",
       "documentation_url": "https://archive.ics.uci.edu/dataset/360/air+quality",
       "mirror_attribution_url": "https://github.com/DIO-2780/air-quality-time-series-exploration/blob/main/data/DATA_SOURCE.md",
       "units": "CO reference concentration in mg/m^3; PT08 sensor responses are not pollutant concentrations; T in Celsius, RH in percent, AH as supplied. Timestamps are local naive; no timezone is inferred.",
       "license_note": "The verified UCI page displays CC BY 4.0, while its legacy description also says research-only and excludes commercial use. Retain both source notices and Vito/UCI attribution. This repository uses the data for academic research; raw data are excluded from Git.",
       "validation_note": "The CSV extracted from the official UCI ZIP matched this SHA-256 during setup. All 9357 timestamps and 13 measurement values also agree with a separately attributed, reformatted mirror. 114 trailing empty rows are omitted; -200 means missing. Official descriptive metadata says 9358 rows and an earlier end date, but the actual official file contains 9357 hourly rows through 2005-04-04."
+    },
+    {
+      "id": "gsw_mirror",
+      "filename": "gsw.csv",
+      "official_url": "https://www.federalreserve.gov/data/yield-curve-tables/feds200628.csv",
+      "official_format": "csv",
+      "download_url": "https://raw.githubusercontent.com/benz3927/forward-spread/f9e3730edf953fd6c05f16aae68b3130bc64b6f6/feds200628.csv",
+      "repository": "https://github.com/benz3927/forward-spread",
+      "commit": "f9e3730edf953fd6c05f16aae68b3130bc64b6f6",
+      "sha256": "e7698724dc93f1e1bb439ffd4608c5fc69b6a5499ed43328c1aadf6cb5a0c790",
+      "bytes": 16465703,
+      "coverage": [
+        "1961-06-14",
+        "2025-10-10"
+      ],
+      "attribution": "Gurkaynak, Sack and Wright, The U.S. Treasury yield curve: 1961 to the present; Federal Reserve Board research data.",
+      "documentation_url": "https://www.federalreserve.gov/data/nominal-yield-curve.htm",
+      "units": "SVENYxx are annualized percentage points, continuously compounded zero-coupon yields; xx is maturity in years. Do not use SVENPYxx par yields.",
+      "license_note": "Public Federal Reserve research product; live official terms were inaccessible during setup. This third-party snapshot has not been checksum-matched to the official source. Raw data are excluded from Git.",
+      "revision_note": "Staff research product subject to revision and methodological change; the vintage is frozen by commit and checksum.",
+      "role": "explicit_optional_mirror"
+    },
+    {
+      "id": "fred_md_mirror",
+      "filename": "fred_md_2026_09.csv",
+      "official_url": "https://www.stlouisfed.org/-/media/project/frbstl/stlouisfed/research/fred-md/monthly/2026-09-md.csv",
+      "official_format": "csv",
+      "download_url": "https://raw.githubusercontent.com/davidemascioli/macroeconomic-factor-forecasting/00e60e3fbb0b235a79eaadd3c90a76b2b09b77cb/2026-09-MD.csv",
+      "repository": "https://github.com/davidemascioli/macroeconomic-factor-forecasting",
+      "commit": "00e60e3fbb0b235a79eaadd3c90a76b2b09b77cb",
+      "sha256": "d6e239038afbdbf4667c2a63c13c942817bc196fedab4355cd7e0d353ecdd65d",
+      "bytes": 669656,
+      "coverage": [
+        "1959-01",
+        "2026-08"
+      ],
+      "vintage": "2026-09",
+      "selected_series": [
+        "FEDFUNDS",
+        "CUMFNS",
+        "CPIAUCSL"
+      ],
+      "attribution": "McCracken and Ng, FRED-MD: A Monthly Database for Macroeconomic Research; Federal Reserve Bank of St. Louis. Snapshot mirrored by Davide Mascioli.",
+      "documentation_url": "https://github.com/davidemascioli/macroeconomic-factor-forecasting/blob/00e60e3fbb0b235a79eaadd3c90a76b2b09b77cb/README.md",
+      "units": "FEDFUNDS and CUMFNS are percent; CPIAUCSL is the seasonally adjusted CPI index. The FRED-MD Transform row is metadata and must not be parsed as an observation.",
+      "license_note": "Underlying series retain source terms; a mirror's code license does not relicense data. Live official source terms were inaccessible. Raw data are excluded from Git.",
+      "revision_note": "September 2026 revised vintage, not real-time observations available at past forecast origins.",
+      "role": "explicit_optional_mirror"
     }
   ]
 }
