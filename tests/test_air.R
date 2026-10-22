@@ -31,10 +31,14 @@ stopifnot(abs(online$mean[1] - (2 + m1)) < 1e-12,
           abs(online$mean[2] - (2 + m2)) < 1e-12,
           abs(online$mean[3] - (2 + .9 * m2_updated)) < 1e-12,
           abs(online$variance[2] - (p2 + .25)) < 1e-12)
+stopifnot(max(abs(rowMeans(online$conditional_mean_draws) -
+                   online$mean[online$diagnostic_positions])) < 1e-12)
 hidden_changed <- reference
 hidden_changed[!schedule] <- hidden_changed[!schedule] + 1000
 hidden_prediction <- predict_air_online(fake_air, hidden_changed, schedule, seed = 82)
 stopifnot(identical(online$draws, hidden_prediction$draws))
+stopifnot(identical(online$conditional_mean_draws,
+                    hidden_prediction$conditional_mean_draws))
 future_changed <- reference
 future_changed[5] <- -100
 future_prediction <- predict_air_online(fake_air, future_changed, schedule, seed = 82)

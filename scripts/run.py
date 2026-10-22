@@ -24,16 +24,25 @@ def digest(path):
 
 def run_experiment(config_path, output=None):
     path = Path(config_path).resolve()
-    config = json.loads(path.read_text())
+    original_config_bytes = path.read_bytes()
+    original_config_sha = hashlib.sha256(original_config_bytes).hexdigest()
+    config = json.loads(original_config_bytes)
     if config.get("schema_version") != 1:
         raise ValueError("Expected schema_version=1")
     if config.get("phase") != "exploratory":
         raise ValueError("This first-round runner only opens exploratory data; confirmation stays sealed")
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    run_id = f"{stamp}-{path.stem}-{digest(path)[:8]}"
+    run_id = f"{stamp}-{path.stem}-{original_config_sha[:8]}"
     out = Path(output).resolve() if output else ROOT / "artifacts" / run_id
     out.mkdir(parents=True, exist_ok=False)
+    (out / "original_config.json").write_bytes(original_config_bytes)
     (out / "config.json").write_text(json.dumps(config, ensure_ascii=False, indent=2) + "\n")
+    config_provenance = {
+        # Preserve the existing field's meaning: the originally supplied bytes.
+        "config_sha256": original_config_sha,
+        "original_config_sha256": original_config_sha,
+        "saved_config_sha256": digest(out / "config.json"),
+    }
     # Validate the source/compiler-keyed native cache before copying executable
     # artifacts. An existing shared object alone does not prove source parity.
     build_script = ROOT / "scripts" / "build_native.R"
@@ -44,25 +53,28 @@ def run_experiment(config_path, output=None):
         if build_result.returncode:
             (out / "metadata.json").write_text(json.dumps({"run_id": run_id, "status": "failed",
                 "exit_code": build_result.returncode, "error": "Native cache validation/build failed",
-                "config_sha256": digest(path), "git_commit": git("rev-parse", "HEAD")}, indent=2) + "\n")
+                **config_provenance, "git_commit": git("rev-parse", "HEAD")}, indent=2) + "\n")
             print((out / "native_build.log").read_text(), file=sys.stderr)
             return build_result.returncode
     manifest = ROOT / "data" / "sources.json"
     data_path = ROOT / config.get("data", {}).get("path", "__no_dataset__")
     tracked_diff = subprocess.run(["git", "diff", "HEAD", "--", "."], cwd=ROOT, capture_output=True).stdout
-    source_hashes = {str(p.relative_to(ROOT)): digest(p) for dirname in ("R", "scripts", "src")
-                     for p in sorted((ROOT / dirname).glob("*")) if p.is_file()}
-    for relative in source_hashes:
+    source_paths = [str(p.relative_to(ROOT)) for dirname in ("R", "scripts", "src")
+                    for p in sorted((ROOT / dirname).glob("*")) if p.is_file()]
+    for relative in source_paths:
         destination = out / "source" / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / relative, destination)
+    # Hash executable snapshots after copying, never the concurrently editable
+    # working tree. A copy can legitimately observe a newer file than discovery.
+    source_hashes = {relative: digest(out / "source" / relative) for relative in source_paths}
     (out / "tracked_changes.diff").write_bytes(tracked_diff)
     native_library = ROOT / "artifacts" / "native" / "bartssm.so"
     native_sha = None
     if native_library.exists():
         (out / "source" / "native").mkdir(exist_ok=True)
         shutil.copy2(native_library, out / "source" / "native" / "bartssm.so")
-        native_sha = digest(native_library)
+        native_sha = digest(out / "source" / "native" / "bartssm.so")
         for name in ("build-key.txt", "build/ssm_native.c"):
             compiled_input = native_library.parent / name
             if compiled_input.exists():
@@ -75,26 +87,29 @@ def run_experiment(config_path, output=None):
         stale_builder = len(key_lines) >= 2 and snap_builder.exists() and key_lines[1] != digest(snap_builder)
         if stale_source or stale_builder:
             (out / "metadata.json").write_text(json.dumps({"run_id": run_id, "status": "failed",
-                "exit_code": 1, "error": "Native source changed while snapshotting; retry after edits finish"}, indent=2) + "\n")
+                "exit_code": 1, "error": "Native source changed while snapshotting; retry after edits finish",
+                **config_provenance}, indent=2) + "\n")
             return 1
     executed_config = json.loads(json.dumps(config))
     if data_path.exists():
         shutil.copy2(data_path, out / "input.csv")
         executed_config["data"]["path"] = str(out / "input.csv")
     (out / "executed_config.json").write_text(json.dumps(executed_config, ensure_ascii=False, indent=2) + "\n")
-    meta = {"run_id": run_id, "started_at": stamp, "status": "running", "config_sha256": digest(path),
+    if manifest.exists():
+        shutil.copy2(manifest, out / "sources.json")
+    processed_manifest = ROOT / "data" / "processed" / "manifest.json"
+    if processed_manifest.exists():
+        shutil.copy2(processed_manifest, out / "data_manifest.json")
+    meta = {"run_id": run_id, "started_at": stamp, "status": "running", **config_provenance,
+            "executed_config_sha256": digest(out / "executed_config.json"),
             "git_commit": git("rev-parse", "HEAD"), "git_branch": git("branch", "--show-current"),
             "git_status": git("status", "--porcelain"), "tracked_diff_sha256": hashlib.sha256(tracked_diff).hexdigest(),
             "source_sha256": source_hashes, "seed": config["seed"], "phase": config["phase"],
             "native_binary_sha256": native_sha,
-            "data_sha256": digest(data_path) if data_path.exists() else None,
-            "source_manifest_sha256": digest(manifest) if manifest.exists() else None}
-    if manifest.exists():
-        (out / "sources.json").write_bytes(manifest.read_bytes())
-    processed_manifest = ROOT / "data" / "processed" / "manifest.json"
-    if processed_manifest.exists():
-        (out / "data_manifest.json").write_bytes(processed_manifest.read_bytes())
-        meta["processed_manifest_sha256"] = digest(processed_manifest)
+            "data_sha256": digest(out / "input.csv") if (out / "input.csv").exists() else None,
+            "source_manifest_sha256": digest(out / "sources.json") if (out / "sources.json").exists() else None}
+    if (out / "data_manifest.json").exists():
+        meta["processed_manifest_sha256"] = digest(out / "data_manifest.json")
     metadata_path = out / "metadata.json"
     metadata_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n")
     command = [str(out / "source" / "scripts" / "Rscript"), str(out / "source" / "scripts" / "experiment.R"),

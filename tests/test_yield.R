@@ -42,6 +42,14 @@ for (model in c("random_walk", "dns_var", "dns_linear", "dns_macro")) {
   fit <- fit_yield(low$y, low$x, model = model, control = ctl, x_next = low$x_next)
   assert(identical(dim(fit$predictions), c(24L, 6L)) && all(is.finite(fit$predictions)),
          paste(model, "predictive draws are missing or non-finite"))
+  assert(identical(dim(fit$prediction_means), dim(fit$predictions)) &&
+           identical(colnames(fit$prediction_means), colnames(fit$predictions)) &&
+           all(is.finite(fit$prediction_means)),
+         paste(model, "conditional prediction means have incorrect draw/maturity layout"))
+  if (model %in% c("random_walk", "dns_var")) {
+    assert(all(apply(fit$prediction_means, 2L, sd) == 0) && is.null(fit$diagnostics),
+           paste(model, "plug-in mean must be fixed and must not receive MCMC diagnostics"))
+  }
   assert(all(is.finite(fit$state_mean)), paste(model, "state estimates invalid"))
   if (!is.null(fit$diagnostics)) {
     assert(identical(dim(fit$diagnostics)[1:2], c(12L, 2L)), paste(model, "chain labels lost"))
@@ -71,6 +79,10 @@ assert(max(abs(joint$state_mean - two_stage$state_mean)) > 1e-6,
        "Joint model did not update latent states")
 assert(all(is.finite(joint$predictions)) && all(is.finite(two_stage$predictions)),
        "BART predictive draws invalid")
+assert(identical(dim(joint$prediction_means), dim(joint$predictions)) &&
+         identical(dim(two_stage$prediction_means), dim(two_stage$predictions)) &&
+         all(is.finite(joint$prediction_means)) && all(is.finite(two_stage$prediction_means)),
+       "BART conditional prediction means invalid")
 assert(all(is.finite(sparse_joint$predictions)) && nrow(sparse_joint$state_mean) == 50L,
        "Missing-maturity joint run failed or compressed time")
 assert(all(apply(joint$predictions, 2L, sd) > 0), "Predictive uncertainty is absent")

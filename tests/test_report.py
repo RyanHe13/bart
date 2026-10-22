@@ -30,6 +30,14 @@ def diagnostic(case, model, passed="TRUE"):
 
 
 class ReportTests(unittest.TestCase):
+    def test_expected_count_includes_missingness_modes(self):
+        config = {"task": "simulation_yield", "models": ["dns_macro", "bart_two_stage", "bart_joint"],
+                  "simulation": {"scenarios": ["nonlinear"], "noise": ["low", "high"],
+                                 "replicates": 1, "missing_modes": ["none", "sparse"]}}
+        self.assertEqual(report.expected_count(config), 12)
+        del config["simulation"]["missing_modes"]
+        self.assertEqual(report.expected_count(config), 6)
+
     def make_run(self, path, scores, diagnostics=None, predictions=None, task="yield", status="completed", models=None):
         path.mkdir(exist_ok=True)
         cases = sorted({s["case"] for s in scores})
@@ -69,6 +77,22 @@ class ReportTests(unittest.TestCase):
             item = score("a", "bart_joint", passed="NA")
             run = self.make_run(Path(directory), [item])
             self.assertEqual(report.score_diagnostic_status(run, item), "诊断缺失")
+
+    def test_air_prediction_failure_overrides_passing_training_and_score(self):
+        with tempfile.TemporaryDirectory() as directory:
+            item = score("gap24", "bart_joint")
+            predictive = diagnostic("gap24", "bart_joint", "FALSE")
+            predictive["variable"] = "predictive_mean_hour1"
+            rows = [diagnostic("air_validation", "bart_joint"), predictive]
+            run = self.make_run(Path(directory), [item], rows, task="air")
+            self.assertEqual(report.score_diagnostic_status(run, item), "未通过：仅pilot")
+
+    def test_legacy_training_only_diagnostics_cannot_claim_prediction_pass(self):
+        with tempfile.TemporaryDirectory() as directory:
+            item = score("gap24", "bart_joint")
+            run = self.make_run(Path(directory), [item], [diagnostic("air_validation", "bart_joint")], task="air")
+            self.assertEqual(report.score_diagnostic_status(run, item), "预测量诊断缺失：旧门禁")
+            self.assertIn("旧诊断门禁", report.render_report([run]))
 
     def test_many_hours_in_three_blocks_do_not_create_confidence_interval(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -120,6 +144,9 @@ class ReportTests(unittest.TestCase):
             cases = [f"2006-{m:02d}" for m in range(1, 10)]
             scores = [score(case, model) for case in cases for model in ["bart_joint", "dns_macro"]]
             diagnostics = [diagnostic(case, model) for case in cases for model in ["bart_joint", "dns_macro"]]
+            diagnostics += [{**diagnostic(case, model), "variable": variable}
+                            for case in cases for model in ["bart_joint", "dns_macro"]
+                            for variable in ["predictive_mean_maturity1", "predictive_observation_maturity1"]]
             predictions = [{"case": case, "model": model, "label": f"maturity{m}", "y": 3, "crps": loss}
                           for case in cases for model, loss in [("bart_joint", .1), ("dns_macro", .2)] for m in range(6)]
             run = self.make_run(Path(directory), scores, diagnostics, predictions)

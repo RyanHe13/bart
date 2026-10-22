@@ -148,7 +148,10 @@ fit_yield <- function(y, x, model = "bart_joint", control = list(), x_next,
                        transition_spectral_radius = max(Mod(eigen(t(coefficients[-1L, ]))$values)))
     }
     colnames(predicted) <- rownames(d$H)
-    return(list(model = model, predictions = predicted, diagnostics = NULL,
+    prediction_means <- matrix(rep(mean_next, each = nd), nd, m,
+                               dimnames = list(NULL, rownames(d$H)))
+    return(list(model = model, predictions = predicted, prediction_means = prediction_means,
+                diagnostics = NULL,
                 state_mean = d$beta, function_mean = NULL,
                 calibration = calibration, metadata = metadata,
                 elapsed_seconds = proc.time()[[3L]] - start, control = ctl))
@@ -171,6 +174,7 @@ fit_yield <- function(y, x, model = "bart_joint", control = list(), x_next,
   diagnostics <- array(NA_real_, c(ctl$draws, ctl$chains, length(diagnostic_names)),
                        dimnames = list(NULL, paste0("chain", seq_len(ctl$chains)), diagnostic_names))
   predicted <- matrix(NA_real_, nd, m, dimnames = list(NULL, rownames(d$H)))
+  prediction_means <- matrix(NA_real_, nd, m, dimnames = list(NULL, rownames(d$H)))
   states_sum <- matrix(0, n, k)
   functions_sum <- matrix(0, n - 1L, k)
   q_shape <- ctl$q_prior_df / 2
@@ -258,8 +262,10 @@ fit_yield <- function(y, x, model = "bart_joint", control = list(), x_next,
         stop("Non-finite yield sampler state at chain ", chain, " iteration ", iteration)
       if (iteration > ctl$burn && (iteration - ctl$burn) %% ctl$thin == 0L) {
         retained <- retained + 1L
-        beta_next <- a * beta[n, ] + f_next + rnorm(k, sd = sqrt(q))
+        next_state_mean <- a * beta[n, ] + f_next
+        beta_next <- next_state_mean + rnorm(k, sd = sqrt(q))
         out_row <- (chain - 1L) * ctl$draws + retained
+        prediction_means[out_row, ] <- as.numeric(d$H %*% next_state_mean)
         predicted[out_row, ] <- as.numeric(d$H %*% beta_next) + rnorm(m, sd = sqrt(r))
         diagnostics[retained, chain, ] <- c(a, q, r, f[n - 1L, ],
                                            if (joint) beta[n, ])
@@ -270,15 +276,18 @@ fit_yield <- function(y, x, model = "bart_joint", control = list(), x_next,
         message(model, " chain ", chain, "/", ctl$chains, " iteration ", iteration, "/", total)
     }
   }
-  list(model = model, predictions = predicted, diagnostics = diagnostics,
+  list(model = model, predictions = predicted, prediction_means = prediction_means,
+       diagnostics = diagnostics,
        state_mean = states_sum / nd, function_mean = functions_sum / nd,
        calibration = calibration,
        metadata = list(inference = if (joint) "Joint latent-state Gibbs" else
                          "Fixed cross-sectional NS estimates; conditional dynamics posterior",
-                       state_prior = "beta_1 ~ N(0,100 I); Q1=0, A1=I",
+                       state_prior = if (joint) "beta_1 ~ N(0,100 I); Q1=0, A1=I" else
+                         "No latent-state prior: cross-sectional OLS state path is fixed",
                        dynamics = "Diagonal A, diagonal Q, diagonal R; |a_j| < a_bound",
                        q_prior = "Scaled inverse chi-squared calibrated once from OLS residuals",
-                       r_prior = "Inverse gamma, shape 2.5, mean equal to frozen OLS residual variance",
+                       r_prior = paste0("Inverse gamma, shape ", ctl$r_prior_shape,
+                                        ", mean equal to frozen OLS residual variance"),
                        variance_owner = if (is_bart) "dbarts: Q; outer Gibbs: R" else "outer Gibbs: Q and R",
                        fixed_quantities = if (!joint) "Cross-sectional OLS state path; excluded from stochastic diagnostics" else character(0),
                        prediction_target = "Future observed yields including measurement noise"),

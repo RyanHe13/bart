@@ -102,7 +102,9 @@ def expected_count(config):
         return models * len(evaluation.get("gaps_hours", []))
     if task in {"simulation_yield", "simulation_air"}:
         result = models * len(simulation.get("scenarios", [])) * int(simulation.get("replicates", 0))
-        return result * len(simulation.get("noise", [])) if task == "simulation_yield" else result
+        if task == "simulation_yield":
+            return result * len(simulation.get("noise", [])) * len(simulation.get("missing_modes", ["none"]))
+        return result
     return None
 
 
@@ -131,10 +133,22 @@ def load_run(path):
 
 
 def relevant_diagnostics(run, score):
-    case = "air_validation" if run["task"] == "air" else score.get("case")
+    cases = {score.get("case")}
+    if run["task"] == "air":
+        cases.add("air_validation")
     model = score.get("model", "")
-    return [r for r in run["diagnostics"] if r.get("case") == case and
+    return [r for r in run["diagnostics"] if r.get("case") in cases and
             (r.get("model") == model or r.get("model", "").startswith(model + ":"))]
+
+
+def prediction_diagnostic_scope(run, score):
+    if score.get("model") in POINT_MODELS:
+        return "点估计：MCMC不适用"
+    variables = [row.get("variable", "") for row in run["diagnostics"]
+                 if row.get("case") == score.get("case") and row.get("model") == score.get("model")]
+    return ("包含条件均值与预测观测诊断" if all(any(v.startswith(prefix) for v in variables)
+            for prefix in ["predictive_mean_", "predictive_observation_"])
+            else "旧门禁/预测量诊断不完整")
 
 
 def diagnostic_row_passed(row):
@@ -160,6 +174,8 @@ def score_diagnostic_status(run, score):
         return "未通过：仅pilot"
     if declared is not True:
         return "汇总诊断未确认"
+    if prediction_diagnostic_scope(run, score) == "旧门禁/预测量诊断不完整":
+        return "预测量诊断缺失：旧门禁"
     return "通过"
 
 
@@ -330,6 +346,9 @@ def render_run(run):
         lines += table(["case", "模型", "异常"], [[r.get("case", ""), r.get("model", ""), r.get("error", "未记录")] for r in run["failures"]])
     if not run["scores"]:
         return lines + ["", "没有可评分结果；本次运行不构成模型验证。", ""]
+
+    if any(prediction_diagnostic_scope(run, score) == "旧门禁/预测量诊断不完整" for score in run["scores"]):
+        lines.append("部分拟合使用旧诊断门禁，未完整记录条件预测均值及预测观测的诊断，不能视为完整预测诊断通过。")
 
     aggregates = aggregate_scores(run)
     lines += ["", "### 各case等权的描述性均值", "",

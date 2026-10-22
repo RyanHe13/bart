@@ -41,10 +41,37 @@ check_fit <- function(fit, case, model) {
   pass
 }
 
-record <- function(case, model, truth, draws, labels, elapsed, diagnostic_pass, state_rmse = NA_real_, function_rmse = NA_real_) {
+check_prediction <- function(fit, case, model, draws, labels, prior_pass,
+                              conditional_mean_draws = NULL, conditional_labels = NULL) {
+  # Plug-in random-walk/VAR simulations are not posterior MCMC chains.
+  if (is.null(fit$diagnostics)) return(prior_pass)
+  observed <- diagnose_prediction_draws(draws, fit$control$draws, fit$control$chains,
+    labels = labels, prefix = "predictive_observation", max_points = if (nrow(draws) <= 6L) 6L else 5L)
+  if (is.null(conditional_mean_draws)) {
+    conditional <- data.frame(variable = "predictive_mean_unavailable", rhat = NA_real_,
+      ess_bulk = NA_real_, ess_tail = NA_real_, passed = FALSE,
+      reason = "Conditional predictive mean samples unavailable")
+  } else {
+    if (is.null(conditional_labels)) conditional_labels <- labels
+    conditional <- diagnose_prediction_draws(conditional_mean_draws,
+      fit$control$draws, fit$control$chains, labels = conditional_labels,
+      prefix = "predictive_mean", max_points = if (nrow(conditional_mean_draws) <= 6L) 6L else 5L)
+  }
+  tab <- rbind(observed, conditional)
+  tab$case <- case; tab$model <- model
+  diagnostics[[length(diagnostics) + 1L]] <<- tab
+  isTRUE(prior_pass) && all(tab$passed %in% TRUE)
+}
+
+record <- function(case, model, truth, draws, labels, elapsed, diagnostic_pass,
+                    state_rmse = NA_real_, function_rmse = NA_real_, fit = NULL,
+                    conditional_mean_draws = NULL, conditional_labels = NULL) {
   draws <- as.matrix(draws)
   if (nrow(draws) != length(truth)) stop("Prediction shape mismatch")
   metrics <- score_predictions(truth, draws)
+  if (metrics$n < 1L) stop("No finite target observations were scored")
+  if (!is.null(fit)) diagnostic_pass <- check_prediction(fit, case, model, draws,
+    labels, diagnostic_pass, conditional_mean_draws, conditional_labels)
   scores[[length(scores) + 1L]] <<- data.frame(case = case, model = model, as.data.frame(metrics),
       elapsed_seconds = elapsed, diagnostic_pass = diagnostic_pass,
       state_rmse = state_rmse, function_rmse = function_rmse, stringsAsFactors = FALSE)
@@ -85,7 +112,8 @@ if (config$task == "yield") {
       elapsed <- proc.time()[3] - start
       saveRDS(fit, file.path(out, "fits", paste0(month, "-", model, ".rds")))
       pass <- check_fit(fit, month, model)
-      record(month, model, as.numeric(data[idx, yields]), t(fit$predictions), yields, elapsed, pass)
+      record(month, model, as.numeric(data[idx, yields]), t(fit$predictions), yields, elapsed, pass,
+             fit = fit, conditional_mean_draws = if (!is.null(fit$prediction_means)) t(fit$prediction_means) else NULL)
     })
   }
 } else if (config$task == "air") {
@@ -105,11 +133,15 @@ if (config$task == "yield") {
     for (gap in config$evaluation$gaps_hours) {
       mask <- make_gap_mask(evaluation$CO, evaluation[, features], gap,
                             config$evaluation$max_blocks, config$evaluation$min_observed_fraction)
-      pred <- predict_air_online(fit, evaluation$CO, reference_allowed = mask$reference_allowed, seed = config$seed + gap)
-      draws <- pred$draws
       ids <- which(mask$score)
+      diagnostic_positions <- ids[unique(round(seq(1, length(ids), length.out = min(5L, length(ids)))))]
+      pred <- predict_air_online(fit, evaluation$CO, reference_allowed = mask$reference_allowed,
+        seed = config$seed + gap, diagnostic_positions = diagnostic_positions)
+      draws <- pred$draws
       record(paste0("gap", gap), model, evaluation$CO[ids], draws[ids, , drop = FALSE],
-             paste0(evaluation$timestamp[ids], ";block=", mask$blocks[ids]), elapsed, pass)
+             paste0(evaluation$timestamp[ids], ";block=", mask$blocks[ids]), elapsed, pass,
+             fit = fit, conditional_mean_draws = pred$conditional_mean_draws,
+             conditional_labels = evaluation$timestamp[pred$diagnostic_positions])
       write.csv(data.frame(timestamp = evaluation$timestamp, block = mask$blocks,
                            reference_allowed = mask$reference_allowed, scored = mask$score),
                 file.path(out, paste0("mask_gap", gap, ".csv")), row.names = FALSE)
@@ -117,11 +149,12 @@ if (config$task == "yield") {
   })
 } else if (config$task == "simulation_yield") {
   s <- config$simulation
-  for (scenario in s$scenarios) for (noise in s$noise) for (rep in seq_len(s$replicates)) {
+  missing_modes <- if (is.null(s$missing_modes)) "none" else s$missing_modes
+  for (scenario in s$scenarios) for (noise in s$noise) for (missing in missing_modes) for (rep in seq_len(s$replicates)) {
     # Common random numbers isolate the effect of measurement-noise magnitude.
     seed <- config$seed + rep + 100L * match(scenario, s$scenarios)
-    generated <- simulate_yield(n = s$n, scenario = scenario, noise = noise, seed = seed)
-    case <- paste(scenario, noise, rep, sep = "_")
+    generated <- simulate_yield(n = s$n, scenario = scenario, noise = noise, seed = seed, missing = missing)
+    case <- if (is.null(s$missing_modes)) paste(scenario, noise, rep, sep = "_") else paste(scenario, noise, missing, rep, sep = "_")
     saveRDS(generated, file.path(out, "fits", paste0(case, "-truth.rds")))
     for (model in config$models) attempt(case, model, {
       start <- proc.time()[3]
@@ -133,7 +166,8 @@ if (config$task == "yield") {
       state_error <- sqrt(mean((fit$state_mean - generated$states)^2))
       function_error <- sqrt(mean((fit$function_mean - generated$f[-1, , drop = FALSE])^2))
       record(case, model, generated$truth_next, t(fit$predictions), paste0("maturity", 1:6), elapsed, pass,
-             state_error, function_error)
+             state_error, function_error, fit = fit,
+             conditional_mean_draws = if (!is.null(fit$prediction_means)) t(fit$prediction_means) else NULL)
     })
   }
 } else if (config$task == "simulation_air") {
@@ -150,15 +184,19 @@ if (config$task == "yield") {
       fit <- fit_air(generated$y[train], generated$x[train, , drop = FALSE], model, run_control,
                      x_test = generated$x[test, , drop = FALSE])
       allowed <- seq_along(test) %% config$evaluation$reference_every == 0L
-      pred <- predict_air_online(fit, generated$y[test], reference_allowed = allowed, seed = seed)
+      ids <- which(!allowed)
+      diagnostic_positions <- ids[unique(round(seq(1, length(ids), length.out = min(5L, length(ids)))))]
+      pred <- predict_air_online(fit, generated$y[test], reference_allowed = allowed, seed = seed,
+                                 diagnostic_positions = diagnostic_positions)
       elapsed <- proc.time()[3] - start
       saveRDS(fit, file.path(out, "fits", paste0(case, "-", model, ".rds")))
       pass <- check_fit(fit, case, model)
       state_error <- sqrt(mean((fit$state_mean - generated$state[train])^2))
       function_error <- sqrt(mean((fit$function_mean - generated$function_mean[train])^2))
-      ids <- which(!allowed)
       record(case, model, generated$y[test][ids], pred$draws[ids, , drop = FALSE], as.character(test[ids]),
-             elapsed, pass, state_error, function_error)
+             elapsed, pass, state_error, function_error, fit = fit,
+             conditional_mean_draws = pred$conditional_mean_draws,
+             conditional_labels = as.character(test[pred$diagnostic_positions]))
     })
   }
 } else stop("Unknown task")

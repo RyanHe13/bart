@@ -247,7 +247,7 @@ fit_air <- function(y, x, model = "bart_joint", control = list(), x_test = NULL)
 # permitted reference reading. This is an equal-weight frozen-parameter
 # filtering ensemble, not a claim of exact sequential parameter Bayes.
 predict_air_online <- function(fit, y_test, reference_allowed = rep(FALSE, length(y_test)),
-                               seed = 20261024L) {
+                               seed = 20261024L, diagnostic_positions = NULL) {
   y_test <- as.numeric(y_test)
   n <- length(y_test)
   if (nrow(fit$f_test) != n || length(reference_allowed) != n)
@@ -257,6 +257,16 @@ predict_air_online <- function(fit, y_test, reference_allowed = rep(FALSE, lengt
   sample_count <- ncol(fit$f_test)
   predictive <- matrix(NA_real_, n, sample_count)
   means <- variances <- rep(NA_real_, n)
+  if (is.null(diagnostic_positions)) {
+    diagnostic_positions <- which(fit$test_valid)
+    if (length(diagnostic_positions) > 5L)
+      diagnostic_positions <- diagnostic_positions[unique(round(seq(1, length(diagnostic_positions), length.out = 5L)))]
+  }
+  if (anyNA(diagnostic_positions) || any(diagnostic_positions != as.integer(diagnostic_positions)) ||
+      any(diagnostic_positions < 1L | diagnostic_positions > n))
+    stop("Invalid online diagnostic positions")
+  diagnostic_positions <- unique(as.integer(diagnostic_positions))
+  conditional_mean_draws <- matrix(NA_real_, length(diagnostic_positions), sample_count)
   rho <- fit$params[, "rho"]
   q <- fit$params[, "q"]
   r <- fit$params[, "r"]
@@ -274,6 +284,8 @@ predict_air_online <- function(fit, y_test, reference_allowed = rep(FALSE, lengt
     if (length(valid)) {
       mu <- f[valid] + m[valid]
       variance <- P[valid] + r[valid]
+      diagnostic_row <- match(t, diagnostic_positions, nomatch = 0L)
+      if (diagnostic_row > 0L) conditional_mean_draws[diagnostic_row, valid] <- mu
       predictive[t, valid] <- stats::rnorm(length(valid), mu, sqrt(variance))
       if (length(valid) == sample_count) {
         means[t] <- mean(mu)
@@ -288,6 +300,8 @@ predict_air_online <- function(fit, y_test, reference_allowed = rep(FALSE, lengt
   }
   list(draws = predictive, mean = means, variance = pmax(variances, 0),
        reference_used = allowed, valid = fit$test_valid,
+       conditional_mean_draws = conditional_mean_draws,
+       diagnostic_positions = diagnostic_positions,
        interpretation = fit$inference)
 }
 

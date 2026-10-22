@@ -59,3 +59,41 @@ diagnose_chains <- function(draws, rhat_limit = 1.01, ess_min = 400) {
   ans$reason <- ifelse(ans$passed, "", "Convergence/ESS threshold not met")
   ans
 }
+
+# Predictions use observation rows and chain-major sample columns: all draws
+# from chain 1, then chain 2, etc. Diagnose selected functionals, not an
+# aggregate mean that has already averaged away chain information.
+diagnose_prediction_draws <- function(draws, draws_per_chain, chains,
+                                      labels = NULL, positions = NULL,
+                                      prefix = "prediction", max_points = 5L,
+                                      rhat_limit = 1.01, ess_min = 400) {
+  draws <- as.matrix(draws)
+  if (!is.numeric(draws) || length(draws_per_chain) != 1L ||
+      length(chains) != 1L || draws_per_chain < 1L || chains < 1L ||
+      draws_per_chain != as.integer(draws_per_chain) || chains != as.integer(chains) ||
+      ncol(draws) != draws_per_chain * chains)
+    stop("Prediction columns must equal draws_per_chain * chains in chain-major order")
+  if (is.null(labels)) labels <- as.character(seq_len(nrow(draws)))
+  if (length(labels) != nrow(draws)) stop("Prediction labels do not match rows")
+  if (length(max_points) != 1L || !is.finite(max_points) || max_points < 1L)
+    stop("max_points must be positive")
+  if (is.null(positions)) positions <- seq_len(nrow(draws))
+  if (anyNA(positions) || any(positions != as.integer(positions)) ||
+      any(positions < 1L | positions > nrow(draws))) stop("Invalid diagnostic positions")
+  positions <- unique(as.integer(positions))
+  valid <- rowSums(!is.finite(draws)) == 0L
+  positions <- positions[valid[positions]]
+  if (!length(positions)) {
+    return(data.frame(variable = paste0(prefix, "_unavailable"), rhat = NA_real_,
+                      ess_bulk = NA_real_, ess_tail = NA_real_, passed = FALSE,
+                      reason = "No finite predictive rows available for diagnostics"))
+  }
+  if (length(positions) > max_points)
+    positions <- positions[unique(round(seq(1, length(positions), length.out = max_points)))]
+  variables <- make.unique(paste0(prefix, "_", labels[positions]))
+  by_chain <- array(NA_real_, c(draws_per_chain, chains, length(positions)),
+                    dimnames = list(NULL, paste0("chain", seq_len(chains)), variables))
+  for (j in seq_along(positions))
+    by_chain[, , j] <- matrix(draws[positions[j], ], nrow = draws_per_chain, ncol = chains)
+  diagnose_chains(by_chain, rhat_limit = rhat_limit, ess_min = ess_min)
+}
