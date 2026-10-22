@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "role": "sampler_audit_only; excluded from predictive model comparison",
+  "metadata": {
+    "run_id": "20261022T175120835793Z-mixing-audit-3ba510964dac",
+    "started_at": "20261022T175120835793Z",
+    "status": "completed",
+    "seed": 20261124,
+    "chain_seeds": [
+      20261124,
+      20271131,
+      20281138,
+      20291145
+    ],
+    "config_sha256": "9251d4a0e08068a0d5d02e18c6d380603fb0fdb39554ecbcbea6b46b3e73b0dd",
+    "git_commit": "2f0f430efd608296f103a90940c78d3b40e3fc04",
+    "git_branch": "research/initial-feasibility",
+    "git_status": " M R/air.R\n M R/metrics.R\n M R/yield.R\n M README.md\n M docs/references.bib\n M docs/research_ideas.md\n M scripts/experiment.R\n M scripts/report.py\n M tests/test_air.R\n M tests/test_report.py\n M tests/test_yield.R\n?? configs/simulation_yield_missing.json\n?? docs/first_round_results.md\n?? results/\n?? scripts/audit_mixing.R\n?? scripts/plot_results.py\n?? tests/test_prediction_diagnostics.R",
+    "tracked_diff_sha256": "731d35532c824bcb0bd90b98d42fe7a6f6de79f0e89451b802b9c53be61eb8e4",
+    "source_sha256": {
+      "R/air.R": "f3b29af58e4a22399fec349a2c20d4cb15321cc9eea46b10f8cbfda5ae013864",
+      "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+      "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+      "R/metrics.R": "990bada8d598fb5a0aba81d893c1f8836dd81aadb5e4070a6e8c56927dc80f88",
+      "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+      "R/yield.R": "20ec2045fdb459344e9ebe4d2b21e26f45a699079cee7389af556acb38898aa8",
+      "scripts/audit_mixing.R": "256173723630edac67fb538e7daa135878d1698109234103222dffc32d756b5c",
+      "scripts/build_native.R": "86a02e4e0be64799693a82c9ec30f6fbb8178173163d5c8cc9cde2988d9d8f9d",
+      "scripts/experiment.R": "aa49e28a8137a812736550bbf7ab29077ef5e9b2dbe339780f6dcc4be4daca51",
+      "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+      "scripts/plot_results.py": "d8ee290869d2d948af54e7791e064789115997f2c035ff6ce992f38ef2172586",
+      "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+      "scripts/report.py": "b4185408f85a8f3cd3b391a9d7c1d0e32cd3f82d3f836b5e55e59b5b397b449e",
+      "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+      "scripts/run.py": "31175ca745e8200cd38ce22203e1ad12996ccc31993eb2ef4426203071ca000c",
+      "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749",
+      "renv.lock": "65d56b4184585709eaa3fd8ae6ea98e0704feb98119371bc85834810f64fae39",
+      "renv/runtime-sources.json": "ce45ee83d7fac7308f6fb9bc633a3f84fefede269a33eba0a04f4f7658c00b0a"
+    },
+    "runtime": {
+      "R": "R version 4.5.0 (2025-04-11)",
+      "platform": "x86_64-pc-linux-gnu",
+      "packages": {
+        "dbarts": "0.9-34",
+        "posterior": "1.6.1",
+        "jsonlite": "1.9.1",
+        "renv": "1.1.2"
+      }
+    },
+    "interpretation": "Static BART sampler diagnostic audit; no hypothesis or predictive-performance claim.",
+    "native_backend": "disabled; this audit does not sample latent states",
+    "elapsed_seconds": 80.554,
+    "exit_code": 0,
+    "result": {
+      "executed_cases": 5,
+      "failed_cases": 0,
+      "diagnostic_pass": false,
+      "diagnostic_failures": [
+        "adapter_20",
+        "adapter_100",
+        "adapter_200",
+        "uninterrupted_20",
+        "uninterrupted_200_long"
+      ]
+    }
+  },
+  "config": {
+    "schema_version": 1,
+    "task": "static_bart_mixing_audit",
+    "phase": "exploratory",
+    "seed": 20261124,
+    "simulation": {
+      "n": 480,
+      "train": 360,
+      "scenario": "no_drift"
+    },
+    "adapter": {
+      "trees": [
+        20,
+        100,
+        200
+      ],
+      "chains": 4,
+      "burn": 1000,
+      "draws": 1000
+    },
+    "uninterrupted_short": {
+      "trees": 20,
+      "chains": 4,
+      "burn": 1000,
+      "draws": 1000
+    },
+    "uninterrupted_long": {
+      "trees": 200,
+      "chains": 4,
+      "burn": 5000,
+      "draws": 10000
+    },
+    "diagnostic_positions": [
+      1,
+      91,
+      180,
+      270,
+      360
+    ],
+    "diagnostic_thresholds": {
+      "rhat_strictly_below": 1.01,
+      "ess_bulk_min": 400,
+      "ess_tail_min": 400
+    }
+  },
+  "simulation": {
+    "generator": "simulate_air",
+    "seed": 20261124,
+    "n": 480,
+    "truth_sha256": "bf64b065cd693df388b3c2390f4a46ee1834eb6ac9da0123bee328ca7a2f009d"
+  },
+  "artifact_file_sha256": {
+    "adapter_100_diagnostics.csv": "a1ab415bebe1399a43f44b25e3729add9945ae1e1243efcff584d335f8b7c814",
+    "adapter_200_diagnostics.csv": "a950e984f7c20dc98893777003d07acada7262471caf9a6baa4291a676c6e187",
+    "adapter_20_diagnostics.csv": "5b3524770f63f532d69d05b6fe26e5fa6f40e24f6dd52e203276ddd058c80cda",
+    "config.json": "9251d4a0e08068a0d5d02e18c6d380603fb0fdb39554ecbcbea6b46b3e73b0dd",
+    "metadata.json": "a28ff7fede8fbcf8eadbfba7db39dfe83b060f0ae44c6c5c4be54e6e1b6e6a52",
+    "session_info.txt": "8251b5fb9ecffa130c9cafa70332d386e0f0840d2e47993c7478b1f7edf5f07b",
+    "simulation_manifest.json": "487aa999f5f3108373485dd3105cd82c1e16f0d9c09efe23965a13afb54308b5",
+    "simulation_truth.rds": "bf64b065cd693df388b3c2390f4a46ee1834eb6ac9da0123bee328ca7a2f009d",
+    "summary.csv": "ca9a43d0676646dda1fac3a349976a39f8f7e0ca75c3a491c5ada3e20946d0aa",
+    "tracked_changes.diff": "731d35532c824bcb0bd90b98d42fe7a6f6de79f0e89451b802b9c53be61eb8e4",
+    "uninterrupted_200_long_diagnostics.csv": "dcd623aa1efa5fee23a6081248291318b70c3f0e878d2404a2e32e24655b1d68",
+    "uninterrupted_20_diagnostics.csv": "5b3524770f63f532d69d05b6fe26e5fa6f40e24f6dd52e203276ddd058c80cda"
+  },
+  "issues": []
+}

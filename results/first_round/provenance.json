@@ -1,0 +1,1696 @@
+{
+  "schema_version": 1,
+  "runs": [
+    {
+      "run_id": "20261022T172441267754Z-simulation_air-2406987f",
+      "config_name": "simulation_air",
+      "task": "simulation_air",
+      "status": "completed",
+      "role": "initial_smoke_or_superseded",
+      "selected_for_results": false,
+      "selection_reason": "Superseded or outside explicit final selection; retained in ledger only",
+      "score_rows": 24,
+      "expected_score_rows": 24,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 30,
+      "config_sha256": "2406987f0fe83e9a39bcfd988301f6d4406026291c034b54a98f6cf0c6228a6c",
+      "git_commit": "e0c4b9f0361f8c0c0164778c6c2e6d44fe0e14e6",
+      "data_sha256": null,
+      "source_manifest_sha256": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482",
+      "source_snapshot_sha256": "80ec63296d579059dafb6bf85175bff9134067763df17b726db8d1d346698349",
+      "scores_csv_sha256": "cddced842f37d2118416bb5658bc1caa60e0f9c209ff2872b7a79cddd8f61315",
+      "diagnostics_csv_sha256": "9e68b5b8c4b3015be66961047322fd34e9441f5a73e439dca45d4136d280a054",
+      "chains": 2,
+      "draws_per_chain": 100,
+      "trees": 20,
+      "elapsed_seconds": 36.44428653299997,
+      "source_file_sha256": {
+        "R/air.R": "82071f92ade284a29df585c0b2e1db32240d50aee8f42964239419e5a3af8e39",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "18d1761f24fb8599158ae454041c998f76a87f0f5b142df89899fabf72d11746",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/experiment.R": "7a071eece45e374d4eec875a4f2eebbf4ca3ab77a994376f28b009497410aef7",
+        "scripts/install.sh": "82fc5ff713e3a20f6bd25aec1b2bcc3b47fa94a2f4dcf525cec4bcbae7b90c62",
+        "scripts/prepare_data.py": "87727d5a3c68bf9c444b7273d36749521e5f2bfa66d51811d14b4d771561935a",
+        "scripts/run.py": "d2e31396a0ef76967c8479cdea54e9196a943e2f278c275c55bb37e03cfb1228"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "d8d2f02de210c5036664f597195605b5b10b25b3d8d7bb3addce4afab67eb44a",
+        "config.json": "48deb53ceae0d477550d7f49cc0f5ec06981e30a364de62825a4a442595000e9",
+        "summary.json": "78ec75f9824c03ada90929b630c15cea400167834f72db41b622513ffc87b1fe",
+        "scores.csv": "cddced842f37d2118416bb5658bc1caa60e0f9c209ff2872b7a79cddd8f61315",
+        "diagnostics.csv": "9e68b5b8c4b3015be66961047322fd34e9441f5a73e439dca45d4136d280a054",
+        "prediction_rows.csv": "c9a15d1c2f63740e3f95f9f82ace1fa61f836d3a78a3c0b3ad2ef01ff4e247ec",
+        "data_manifest.json": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83",
+        "sources.json": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "simulation_air",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 2,
+          "burn": 100,
+          "draws": 100,
+          "trees": 20,
+          "rho": 0.99
+        },
+        "models": [
+          "bart_static",
+          "linear_dynamic",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "simulation": {
+          "n": 480,
+          "train_n": 360,
+          "replicates": 2,
+          "scenarios": [
+            "no_drift",
+            "drift",
+            "slow_covariates"
+          ]
+        },
+        "evaluation": {
+          "reference_every": 24
+        }
+      },
+      "summary": {
+        "task": "simulation_air",
+        "phase": "exploratory",
+        "completed": 24,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 24,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 24
+        },
+        "fit_stages": 30,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 186,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processed_manifest_sha256": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83"
+    },
+    {
+      "run_id": "20261022T172441274110Z-simulation_yield-34654078",
+      "config_name": "simulation_yield",
+      "task": "simulation_yield",
+      "status": "failed",
+      "role": "failed_experiment",
+      "selected_for_results": false,
+      "selection_reason": "Execution failed; retained in ledger only, excluded from success tables and figures",
+      "score_rows": 36,
+      "expected_score_rows": 36,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 36,
+      "config_sha256": "346540788063ecb26389484b8d4141e1157e10771f5ce22ba0bfd57045c15774",
+      "git_commit": "e0c4b9f0361f8c0c0164778c6c2e6d44fe0e14e6",
+      "data_sha256": null,
+      "source_manifest_sha256": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482",
+      "source_snapshot_sha256": "80ec63296d579059dafb6bf85175bff9134067763df17b726db8d1d346698349",
+      "scores_csv_sha256": "c18c51b5fbab1e7d8f2d7a826b42fa398b08512e7e3185eed9d882837a59ab67",
+      "diagnostics_csv_sha256": "235baca7a6a81a5cfee1a7e8d41a44ab1fabf473f57d2537a4faeb3285771237",
+      "chains": 2,
+      "draws_per_chain": 100,
+      "trees": 20,
+      "elapsed_seconds": 201.12453507700002,
+      "source_file_sha256": {
+        "R/air.R": "82071f92ade284a29df585c0b2e1db32240d50aee8f42964239419e5a3af8e39",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "18d1761f24fb8599158ae454041c998f76a87f0f5b142df89899fabf72d11746",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/experiment.R": "7a071eece45e374d4eec875a4f2eebbf4ca3ab77a994376f28b009497410aef7",
+        "scripts/install.sh": "82fc5ff713e3a20f6bd25aec1b2bcc3b47fa94a2f4dcf525cec4bcbae7b90c62",
+        "scripts/prepare_data.py": "87727d5a3c68bf9c444b7273d36749521e5f2bfa66d51811d14b4d771561935a",
+        "scripts/run.py": "d2e31396a0ef76967c8479cdea54e9196a943e2f278c275c55bb37e03cfb1228"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "7d22315394a3669f83b6a4acd6cd10061b833b7721241b373b8ec06861d47826",
+        "config.json": "4fcb5c656979d8c13e5bc28ec4a80035f8e1520a9bacdde0729b19860b6453a2",
+        "summary.json": "cc2d77be48d4fc7535c56b4c359c8d658776e3dd09d95d56d9fa0ce8a21f4176",
+        "scores.csv": "c18c51b5fbab1e7d8f2d7a826b42fa398b08512e7e3185eed9d882837a59ab67",
+        "diagnostics.csv": "235baca7a6a81a5cfee1a7e8d41a44ab1fabf473f57d2537a4faeb3285771237",
+        "prediction_rows.csv": "c7ea7b97a6346521e76e7f3ad5316cec3d61a6f53a4fcdb959b9d775a9204c3a",
+        "data_manifest.json": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83",
+        "sources.json": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "simulation_yield",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 2,
+          "burn": 100,
+          "draws": 100,
+          "trees": 20
+        },
+        "models": [
+          "dns_macro",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "simulation": {
+          "n": 120,
+          "replicates": 2,
+          "scenarios": [
+            "linear",
+            "nonlinear",
+            "conditional_persistence"
+          ],
+          "noise": [
+            "low",
+            "high"
+          ]
+        }
+      },
+      "summary": {
+        "task": "simulation_yield",
+        "phase": "exploratory",
+        "completed": 36,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 36,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 36
+        },
+        "fit_stages": 36,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 612,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processed_manifest_sha256": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83"
+    },
+    {
+      "run_id": "20261022T172441284015Z-air_pilot-4e04475f",
+      "config_name": "air_pilot",
+      "task": "air",
+      "status": "completed",
+      "role": "initial_smoke_or_superseded",
+      "selected_for_results": false,
+      "selection_reason": "Superseded or outside explicit final selection; retained in ledger only",
+      "score_rows": 12,
+      "expected_score_rows": 12,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 5,
+      "config_sha256": "4e04475fdf20d8de8ddbe99c8b5a9576b1e4348e4530a9cfa447c837d671fb7e",
+      "git_commit": "e0c4b9f0361f8c0c0164778c6c2e6d44fe0e14e6",
+      "data_sha256": "42335552048262b10371adaee051bc751cff952107be55d1ac081f19c0762649",
+      "source_manifest_sha256": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482",
+      "source_snapshot_sha256": "80ec63296d579059dafb6bf85175bff9134067763df17b726db8d1d346698349",
+      "scores_csv_sha256": "1f2c354d389fbc04e3bb8e716d981a5a0da07d960d907382fb2456af020bfb9c",
+      "diagnostics_csv_sha256": "859081c5d544ce3833c51a3386a111b0ba20bb52255c8cdc6fdcc7d1d82d1421",
+      "chains": 2,
+      "draws_per_chain": 100,
+      "trees": 20,
+      "elapsed_seconds": 89.45122755599982,
+      "source_file_sha256": {
+        "R/air.R": "82071f92ade284a29df585c0b2e1db32240d50aee8f42964239419e5a3af8e39",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "18d1761f24fb8599158ae454041c998f76a87f0f5b142df89899fabf72d11746",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/experiment.R": "7a071eece45e374d4eec875a4f2eebbf4ca3ab77a994376f28b009497410aef7",
+        "scripts/install.sh": "82fc5ff713e3a20f6bd25aec1b2bcc3b47fa94a2f4dcf525cec4bcbae7b90c62",
+        "scripts/prepare_data.py": "87727d5a3c68bf9c444b7273d36749521e5f2bfa66d51811d14b4d771561935a",
+        "scripts/run.py": "d2e31396a0ef76967c8479cdea54e9196a943e2f278c275c55bb37e03cfb1228"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "3b03472e0cfd65ae196c642749dd5d9511dfe553aacf5fcb8c4371ee00d04676",
+        "config.json": "7e92821f4f794e9dda0d512f6e7f4ad658c08500677e48d9392b7f4882ff3129",
+        "summary.json": "f49e8df57e3f67927531f8a728e3fd2acb25fe254a81110cf9a9cb810f9a4c69",
+        "scores.csv": "1f2c354d389fbc04e3bb8e716d981a5a0da07d960d907382fb2456af020bfb9c",
+        "diagnostics.csv": "859081c5d544ce3833c51a3386a111b0ba20bb52255c8cdc6fdcc7d1d82d1421",
+        "prediction_rows.csv": "64e3f77e0b1d176722cfd5a26074cf5f0862dc5c1ace8d7dcb442df850111ee6",
+        "data_manifest.json": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83",
+        "sources.json": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "air",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 2,
+          "burn": 100,
+          "draws": 100,
+          "trees": 20,
+          "rho": 0.99
+        },
+        "models": [
+          "bart_static",
+          "linear_dynamic",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "data": {
+          "path": "data/processed/air_quality.csv",
+          "features": [
+            "PT08_1",
+            "PT08_2",
+            "PT08_3",
+            "PT08_4",
+            "PT08_5",
+            "T",
+            "RH",
+            "AH"
+          ]
+        },
+        "evaluation": {
+          "split": "validation",
+          "gaps_hours": [
+            24,
+            72,
+            168
+          ],
+          "max_blocks": 3,
+          "min_observed_fraction": 0.8
+        }
+      },
+      "summary": {
+        "task": "air",
+        "phase": "exploratory",
+        "completed": 12,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 12,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 12
+        },
+        "fit_stages": 5,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 31,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processed_manifest_sha256": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83"
+    },
+    {
+      "run_id": "20261022T172441285776Z-yield_pilot-cc71217b",
+      "config_name": "yield_pilot",
+      "task": "yield",
+      "status": "failed",
+      "role": "failed_experiment",
+      "selected_for_results": false,
+      "selection_reason": "Execution failed; retained in ledger only, excluded from success tables and figures",
+      "score_rows": 18,
+      "expected_score_rows": 18,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 6,
+      "fit_stages_passed": 0,
+      "fit_stages": 12,
+      "config_sha256": "cc71217ba8b5b59a1e130e3190063d8d093ec2671092be14428b711f688e6c8b",
+      "git_commit": "e0c4b9f0361f8c0c0164778c6c2e6d44fe0e14e6",
+      "data_sha256": "c99b4a083e74a478a0ee5fb7e308a8d5c83abf340cfe782bf5010c5faccb230f",
+      "source_manifest_sha256": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482",
+      "source_snapshot_sha256": "80ec63296d579059dafb6bf85175bff9134067763df17b726db8d1d346698349",
+      "scores_csv_sha256": "a36f4b3ec57c946e116152ac79bdcde99105fa06f8ada5e48a523574444f7845",
+      "diagnostics_csv_sha256": "1f5056495d38f37adce1192beb204f54b7fa5e5700a955769e882252abef5a0d",
+      "chains": 2,
+      "draws_per_chain": 100,
+      "trees": 20,
+      "elapsed_seconds": 194.232346818,
+      "source_file_sha256": {
+        "R/air.R": "82071f92ade284a29df585c0b2e1db32240d50aee8f42964239419e5a3af8e39",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "18d1761f24fb8599158ae454041c998f76a87f0f5b142df89899fabf72d11746",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/experiment.R": "7a071eece45e374d4eec875a4f2eebbf4ca3ab77a994376f28b009497410aef7",
+        "scripts/install.sh": "82fc5ff713e3a20f6bd25aec1b2bcc3b47fa94a2f4dcf525cec4bcbae7b90c62",
+        "scripts/prepare_data.py": "87727d5a3c68bf9c444b7273d36749521e5f2bfa66d51811d14b4d771561935a",
+        "scripts/run.py": "d2e31396a0ef76967c8479cdea54e9196a943e2f278c275c55bb37e03cfb1228"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "5f9fd2f2668360dbe991ae53dfc43e4f612f8aa42defad76b883140c2c142d5b",
+        "config.json": "c07bddcd4aaf4105147ce90e5b37d59fb6692017e32c69eddb9c157a9722e99d",
+        "summary.json": "36406cb45862cc4ae376c3da2883b4815dcedbd00fb7c80eb242811ae9f54b91",
+        "scores.csv": "a36f4b3ec57c946e116152ac79bdcde99105fa06f8ada5e48a523574444f7845",
+        "diagnostics.csv": "1f5056495d38f37adce1192beb204f54b7fa5e5700a955769e882252abef5a0d",
+        "prediction_rows.csv": "3c255d9ad7e5325c329e4e116e9530e48d67bf77ef1c5c20b3f42d4e683bf915",
+        "data_manifest.json": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83",
+        "sources.json": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "yield",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 2,
+          "burn": 100,
+          "draws": 100,
+          "trees": 20
+        },
+        "models": [
+          "random_walk",
+          "dns_var",
+          "dns_linear",
+          "dns_macro",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "data": {
+          "path": "data/processed/yield_monthly.csv",
+          "features": [
+            "macro_fedfunds",
+            "macro_cumfns",
+            "macro_inflation"
+          ],
+          "capacity_series": "CUMFNS",
+          "start": "1985-01-01"
+        },
+        "evaluation": {
+          "target_months": [
+            "2006-01",
+            "2012-01",
+            "2019-01"
+          ],
+          "confirmation_start": "2020-01-01"
+        }
+      },
+      "summary": {
+        "task": "yield",
+        "phase": "exploratory",
+        "completed": 18,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 18,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 6,
+        "score_status_counts": {
+          "点估计：MCMC不适用": 6,
+          "未通过：仅pilot": 12
+        },
+        "fit_stages": 12,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 207,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processed_manifest_sha256": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83"
+    },
+    {
+      "run_id": "20261022T173136675021Z-air_diagnostic-e52735dd",
+      "config_name": "air_diagnostic",
+      "task": "air",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 12,
+      "expected_score_rows": 12,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 5,
+      "config_sha256": "e52735dd1209f98897d19ed4eda88b8da3192eeae390057e229bcf30abc7785e",
+      "git_commit": "b98f138371c72033549f7b4a73ed615c63b83294",
+      "data_sha256": "42335552048262b10371adaee051bc751cff952107be55d1ac081f19c0762649",
+      "source_manifest_sha256": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482",
+      "source_snapshot_sha256": "e6c99789f8039d980381a78a58834b8c4393ac993caf31ae81c3e6af83021184",
+      "scores_csv_sha256": "68ac91ed145ed8792b605ac658f61aaf6d56b20169ccdc6e1a61c95e75f3a063",
+      "diagnostics_csv_sha256": "634744137effbd74d884bf5455c23fb49305a1e0c551e2e5302acbd409ad1a9b",
+      "chains": 4,
+      "draws_per_chain": 1000,
+      "trees": 20,
+      "elapsed_seconds": 110.70436734999998,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "643eb32edc945da1673d2d6414f66773008b85374509a2af69061d3ebdb7a347",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "36561d63d274663c2cbea93e7b4ee5830e786f5e3b8094deaeb07801ecf58cf7",
+        "scripts/experiment.R": "61c084aff82b1f3bba62e5be080d62fe9ef9672a087111b4d5685d3ef6272f83",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "87727d5a3c68bf9c444b7273d36749521e5f2bfa66d51811d14b4d771561935a",
+        "scripts/report.py": "06145cc36f4dfa58b581a3a60c64f7dac4b1339b9d0ac61b1cfd39bc7093c5f3",
+        "scripts/run.py": "29ab89edcba65fa3fe72c355d1695c90cce29e48b8e32fe67361f2658df92a4a",
+        "src/ssm_native.c": "3f1028e8eb052c0c67adb57197dfb44ebe4818aae5c7f432c495b50a3f35b877"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "99b5d5fdb5bd258aab163117ef786e47733340761f22f4f3950c8a297cfdb1b0",
+        "config.json": "e52735dd1209f98897d19ed4eda88b8da3192eeae390057e229bcf30abc7785e",
+        "summary.json": "f49e8df57e3f67927531f8a728e3fd2acb25fe254a81110cf9a9cb810f9a4c69",
+        "scores.csv": "68ac91ed145ed8792b605ac658f61aaf6d56b20169ccdc6e1a61c95e75f3a063",
+        "diagnostics.csv": "634744137effbd74d884bf5455c23fb49305a1e0c551e2e5302acbd409ad1a9b",
+        "prediction_rows.csv": "367cc165d44e8e5a98717e8c69d854f5cdd0ddf861528a283b6eef6a50d1facc",
+        "data_manifest.json": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83",
+        "sources.json": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "air",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 4,
+          "burn": 1000,
+          "draws": 1000,
+          "trees": 20,
+          "rho": 0.99
+        },
+        "models": [
+          "bart_static",
+          "linear_dynamic",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "data": {
+          "path": "data/processed/air_quality.csv",
+          "features": [
+            "PT08_1",
+            "PT08_2",
+            "PT08_3",
+            "PT08_4",
+            "PT08_5",
+            "T",
+            "RH",
+            "AH"
+          ]
+        },
+        "evaluation": {
+          "split": "validation",
+          "gaps_hours": [
+            24,
+            72,
+            168
+          ],
+          "max_blocks": 12,
+          "min_observed_fraction": 0.8
+        }
+      },
+      "summary": {
+        "task": "air",
+        "phase": "exploratory",
+        "completed": 12,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 12,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 12
+        },
+        "fit_stages": 5,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 31,
+        "diagnostic_variables_passed": 1
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "5594e49f38124e205852fc4b77f0375dc64e6b3911f82ef75c41a78b23f0f66b",
+      "processed_manifest_sha256": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83"
+    },
+    {
+      "run_id": "20261022T173136683849Z-simulation_air_diagnostic-036e60dc",
+      "config_name": "simulation_air_diagnostic",
+      "task": "simulation_air",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 24,
+      "expected_score_rows": 24,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 30,
+      "config_sha256": "036e60dc77d6e74bb17dd637c6f4f7db90339912ba044142883a807333b04d82",
+      "git_commit": "b98f138371c72033549f7b4a73ed615c63b83294",
+      "data_sha256": null,
+      "source_manifest_sha256": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482",
+      "source_snapshot_sha256": "e6c99789f8039d980381a78a58834b8c4393ac993caf31ae81c3e6af83021184",
+      "scores_csv_sha256": "131aad0472bcdc6dd0d1f5b271de29491fd00893ab95aea993120907f51cbd6e",
+      "diagnostics_csv_sha256": "5ad558a7bfe5c9e981cea7c3e94bc69f8ef48afd31a18af5148b6ced38c5752b",
+      "chains": 4,
+      "draws_per_chain": 1000,
+      "trees": 20,
+      "elapsed_seconds": 106.50823333699987,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "643eb32edc945da1673d2d6414f66773008b85374509a2af69061d3ebdb7a347",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "36561d63d274663c2cbea93e7b4ee5830e786f5e3b8094deaeb07801ecf58cf7",
+        "scripts/experiment.R": "61c084aff82b1f3bba62e5be080d62fe9ef9672a087111b4d5685d3ef6272f83",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "87727d5a3c68bf9c444b7273d36749521e5f2bfa66d51811d14b4d771561935a",
+        "scripts/report.py": "06145cc36f4dfa58b581a3a60c64f7dac4b1339b9d0ac61b1cfd39bc7093c5f3",
+        "scripts/run.py": "29ab89edcba65fa3fe72c355d1695c90cce29e48b8e32fe67361f2658df92a4a",
+        "src/ssm_native.c": "3f1028e8eb052c0c67adb57197dfb44ebe4818aae5c7f432c495b50a3f35b877"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "06d88461556fdbba97063cb27ed2f0d95525a6dfd3776719e1756239751609f6",
+        "config.json": "036e60dc77d6e74bb17dd637c6f4f7db90339912ba044142883a807333b04d82",
+        "summary.json": "78ec75f9824c03ada90929b630c15cea400167834f72db41b622513ffc87b1fe",
+        "scores.csv": "131aad0472bcdc6dd0d1f5b271de29491fd00893ab95aea993120907f51cbd6e",
+        "diagnostics.csv": "5ad558a7bfe5c9e981cea7c3e94bc69f8ef48afd31a18af5148b6ced38c5752b",
+        "prediction_rows.csv": "9e8812a67a33d89d1f48e087eab417ce22eabc1faafd238e47cc39207e1f8929",
+        "data_manifest.json": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83",
+        "sources.json": "85a586ab0c61d5330bd196e24f67a8b30ba6fb812f2d790b00d36cb3617fd482"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "simulation_air",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 4,
+          "burn": 1000,
+          "draws": 1000,
+          "trees": 20,
+          "rho": 0.99
+        },
+        "models": [
+          "bart_static",
+          "linear_dynamic",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "simulation": {
+          "n": 480,
+          "train_n": 360,
+          "replicates": 2,
+          "scenarios": [
+            "no_drift",
+            "drift",
+            "slow_covariates"
+          ]
+        },
+        "evaluation": {
+          "reference_every": 24
+        }
+      },
+      "summary": {
+        "task": "simulation_air",
+        "phase": "exploratory",
+        "completed": 24,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 24,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 24
+        },
+        "fit_stages": 30,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 186,
+        "diagnostic_variables_passed": 24
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "5594e49f38124e205852fc4b77f0375dc64e6b3911f82ef75c41a78b23f0f66b",
+      "processed_manifest_sha256": "abb82b35cbf8927eda545bb825d00753fd1b1e002d667212fa5560ef95432b83"
+    },
+    {
+      "run_id": "20261022T173619277606Z-air_mixing_check-6fd39442",
+      "config_name": "air_mixing_check",
+      "task": "air",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 6,
+      "expected_score_rows": 6,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 2,
+      "config_sha256": "6fd3944240f82954dcafd981c38eeb2a170c6562a325d185c91eddeb5fdbca7d",
+      "git_commit": "409a73fe6f3cf314a187bb5b88eae1d739ecfaa1",
+      "data_sha256": "42335552048262b10371adaee051bc751cff952107be55d1ac081f19c0762649",
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "173729ba9898e30f6e91b4edecdb39d6cad1bd38f1a1bf84b85ac9dc83b14bd2",
+      "scores_csv_sha256": "b12d550e68dd090a9d2906b16e7268449615bc5410b18b3a3d73c1624f80facf",
+      "diagnostics_csv_sha256": "8da8013548243334546bcecfaf77b28c9e8a632c35549e2a2c993c169b1ce2c5",
+      "chains": 4,
+      "draws_per_chain": 5000,
+      "trees": 200,
+      "elapsed_seconds": 1037.717208644,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "4dfc1a6b4dd1414d8ce15bedbf3357978d92e92f153bba1ebf674ea0e93dfe18",
+        "scripts/experiment.R": "61c084aff82b1f3bba62e5be080d62fe9ef9672a087111b4d5685d3ef6272f83",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "4a9c7e062f2c925d7f687f6674a19d36e101766eb5cec193cee3f434d1a16db9",
+        "scripts/run.py": "29ab89edcba65fa3fe72c355d1695c90cce29e48b8e32fe67361f2658df92a4a",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "2a86b186ae3bbfa767bb0abc5a55d8288c428d5e02b1dd554cb46d149e4cf78d",
+        "config.json": "6fd3944240f82954dcafd981c38eeb2a170c6562a325d185c91eddeb5fdbca7d",
+        "summary.json": "11e4a21715f47d75b7cceb4f26388cb59be29ff8f7b5cdbd818a33017e76022b",
+        "scores.csv": "b12d550e68dd090a9d2906b16e7268449615bc5410b18b3a3d73c1624f80facf",
+        "diagnostics.csv": "8da8013548243334546bcecfaf77b28c9e8a632c35549e2a2c993c169b1ce2c5",
+        "prediction_rows.csv": "93f671bc448296d1a8c5781450685dd69c43d2fc9357de786ed28b405d0c13e3",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "air",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 4,
+          "burn": 5000,
+          "draws": 5000,
+          "trees": 200,
+          "rho": 0.99
+        },
+        "models": [
+          "bart_static",
+          "bart_joint"
+        ],
+        "data": {
+          "path": "data/processed/air_quality.csv",
+          "features": [
+            "PT08_1",
+            "PT08_2",
+            "PT08_3",
+            "PT08_4",
+            "PT08_5",
+            "T",
+            "RH",
+            "AH"
+          ]
+        },
+        "evaluation": {
+          "split": "validation",
+          "gaps_hours": [
+            24,
+            72,
+            168
+          ],
+          "max_blocks": 12,
+          "min_observed_fraction": 0.8
+        }
+      },
+      "summary": {
+        "task": "air",
+        "phase": "exploratory",
+        "completed": 6,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 6,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 6
+        },
+        "fit_stages": 2,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 14,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "abc7a95eb316c9552b44a2cc68cf809e891cb4283e095772750ac61eb1d886f8",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    },
+    {
+      "run_id": "20261022T173620494398Z-simulation_air_mixing_check-f2011729",
+      "config_name": "simulation_air_mixing_check",
+      "task": "simulation_air",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 4,
+      "expected_score_rows": 4,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 4,
+      "config_sha256": "f201172915b4e69e7671548f0cfcb24bb93bb0f3cff61ebebb7b01b745aabba7",
+      "git_commit": "409a73fe6f3cf314a187bb5b88eae1d739ecfaa1",
+      "data_sha256": null,
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "173729ba9898e30f6e91b4edecdb39d6cad1bd38f1a1bf84b85ac9dc83b14bd2",
+      "scores_csv_sha256": "6769bde28ab50270d909f6df6d6dd4189390967c9f846ec0bdd10fc01ed752cc",
+      "diagnostics_csv_sha256": "a9782d00bfca9143e1bcd48393c24a4a4b1bc3acd244ebb953800a2b38dc2836",
+      "chains": 4,
+      "draws_per_chain": 5000,
+      "trees": 200,
+      "elapsed_seconds": 249.60861990399962,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "4dfc1a6b4dd1414d8ce15bedbf3357978d92e92f153bba1ebf674ea0e93dfe18",
+        "scripts/experiment.R": "61c084aff82b1f3bba62e5be080d62fe9ef9672a087111b4d5685d3ef6272f83",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "4a9c7e062f2c925d7f687f6674a19d36e101766eb5cec193cee3f434d1a16db9",
+        "scripts/run.py": "29ab89edcba65fa3fe72c355d1695c90cce29e48b8e32fe67361f2658df92a4a",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "5f18119f192adc946a49615142e3717fba46c173a81fad35ea9cc43d4c4ebeba",
+        "config.json": "f201172915b4e69e7671548f0cfcb24bb93bb0f3cff61ebebb7b01b745aabba7",
+        "summary.json": "feebbebace430f0681156b37a2efef929bb4ed05ff5e3a5e5e7fdc550046082e",
+        "scores.csv": "6769bde28ab50270d909f6df6d6dd4189390967c9f846ec0bdd10fc01ed752cc",
+        "diagnostics.csv": "a9782d00bfca9143e1bcd48393c24a4a4b1bc3acd244ebb953800a2b38dc2836",
+        "prediction_rows.csv": "80940b678a246c29191be49bac25c2491772c063383b590d55a204f7061da141",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "simulation_air",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 4,
+          "burn": 5000,
+          "draws": 5000,
+          "trees": 200,
+          "rho": 0.99
+        },
+        "models": [
+          "bart_static",
+          "bart_joint"
+        ],
+        "simulation": {
+          "n": 480,
+          "train_n": 360,
+          "replicates": 1,
+          "scenarios": [
+            "drift",
+            "slow_covariates"
+          ]
+        },
+        "evaluation": {
+          "reference_every": 24
+        }
+      },
+      "summary": {
+        "task": "simulation_air",
+        "phase": "exploratory",
+        "completed": 4,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 4,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 4
+        },
+        "fit_stages": 4,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 28,
+        "diagnostic_variables_passed": 8
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "abc7a95eb316c9552b44a2cc68cf809e891cb4283e095772750ac61eb1d886f8",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    },
+    {
+      "run_id": "20261022T173918199075Z-simulation_yield_diagnostic-928a6ac9",
+      "config_name": "simulation_yield_diagnostic",
+      "task": "simulation_yield",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 12,
+      "expected_score_rows": 12,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 12,
+      "config_sha256": "928a6ac9d2e2f0cf5f412b8398669010d797ac527cde560c8c0ed4f32ddd8d66",
+      "git_commit": "2f0f430efd608296f103a90940c78d3b40e3fc04",
+      "data_sha256": null,
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "d0553802806a761387d7bf1db010ea095fb80b23ba5b479161b357138430c3fd",
+      "scores_csv_sha256": "86e63d849ef5c8d7c1d985848e114a97ddd8c6f4580ee534f48c0ac2f87aaf49",
+      "diagnostics_csv_sha256": "dbedd45a1bd1ffff8971689907ca6c8e155ce732bef3204029b03095c227cd96",
+      "chains": 4,
+      "draws_per_chain": 1000,
+      "trees": 20,
+      "elapsed_seconds": 109.42157460399994,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "86a02e4e0be64799693a82c9ec30f6fbb8178173163d5c8cc9cde2988d9d8f9d",
+        "scripts/experiment.R": "61c084aff82b1f3bba62e5be080d62fe9ef9672a087111b4d5685d3ef6272f83",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "4a9c7e062f2c925d7f687f6674a19d36e101766eb5cec193cee3f434d1a16db9",
+        "scripts/run.py": "31175ca745e8200cd38ce22203e1ad12996ccc31993eb2ef4426203071ca000c",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "c88732712683d44323409613eabb2215a1dbc7f5b28feab7051e99c27990d3f1",
+        "config.json": "928a6ac9d2e2f0cf5f412b8398669010d797ac527cde560c8c0ed4f32ddd8d66",
+        "summary.json": "520a2f11f5fd9c33987b6a166ee87aa57456158045e2f872e5534f9c50599cfe",
+        "scores.csv": "86e63d849ef5c8d7c1d985848e114a97ddd8c6f4580ee534f48c0ac2f87aaf49",
+        "diagnostics.csv": "dbedd45a1bd1ffff8971689907ca6c8e155ce732bef3204029b03095c227cd96",
+        "prediction_rows.csv": "4777c707591a7bcd4cef5cbdf0c3444ccda1b14455d73b40b4e81bd82103f728",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "simulation_yield",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 4,
+          "burn": 1000,
+          "draws": 1000,
+          "trees": 20
+        },
+        "models": [
+          "dns_macro",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "simulation": {
+          "n": 120,
+          "replicates": 1,
+          "scenarios": [
+            "linear",
+            "nonlinear"
+          ],
+          "noise": [
+            "low",
+            "high"
+          ]
+        }
+      },
+      "summary": {
+        "task": "simulation_yield",
+        "phase": "exploratory",
+        "completed": 12,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 12,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 12
+        },
+        "fit_stages": 12,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 204,
+        "diagnostic_variables_passed": 108
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    },
+    {
+      "run_id": "20261022T173918202213Z-yield_diagnostic-2dfcb415",
+      "config_name": "yield_diagnostic",
+      "task": "yield",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 6,
+      "expected_score_rows": 6,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 2,
+      "fit_stages_passed": 0,
+      "fit_stages": 4,
+      "config_sha256": "2dfcb41506168005d34ad020b29de7347814a51f96e57aed5f1b5cff971a022d",
+      "git_commit": "2f0f430efd608296f103a90940c78d3b40e3fc04",
+      "data_sha256": "fbdab87bb19089ef33d6009aaea9d62a12e784b6c2cfa0cabf035f44c489c349",
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "d0553802806a761387d7bf1db010ea095fb80b23ba5b479161b357138430c3fd",
+      "scores_csv_sha256": "09e4da3fe041f015003e878eb0f38a6b7d51bac8beb2e2c61e9d9f214077c4ee",
+      "diagnostics_csv_sha256": "b8d1412ba703c4066d47ac3262175cd24339778eb04df7eaea28850e8f70f37f",
+      "chains": 4,
+      "draws_per_chain": 1000,
+      "trees": 20,
+      "elapsed_seconds": 52.810194222000064,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "86a02e4e0be64799693a82c9ec30f6fbb8178173163d5c8cc9cde2988d9d8f9d",
+        "scripts/experiment.R": "61c084aff82b1f3bba62e5be080d62fe9ef9672a087111b4d5685d3ef6272f83",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "4a9c7e062f2c925d7f687f6674a19d36e101766eb5cec193cee3f434d1a16db9",
+        "scripts/run.py": "31175ca745e8200cd38ce22203e1ad12996ccc31993eb2ef4426203071ca000c",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "d384e8de72621ea339085497c5568da3d8f4d31ea0c2c3aafcd2d3be21e76efe",
+        "config.json": "2dfcb41506168005d34ad020b29de7347814a51f96e57aed5f1b5cff971a022d",
+        "summary.json": "04edc73ad0197d58c85bc4df096d09bbeb4841ad3d4bc292fd2083355fa92328",
+        "scores.csv": "09e4da3fe041f015003e878eb0f38a6b7d51bac8beb2e2c61e9d9f214077c4ee",
+        "diagnostics.csv": "b8d1412ba703c4066d47ac3262175cd24339778eb04df7eaea28850e8f70f37f",
+        "prediction_rows.csv": "004b80b09d34659c7d62fd4773b2c1b59a330445313e36b4ecf6c94c4aeda381",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "yield",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 4,
+          "burn": 1000,
+          "draws": 1000,
+          "trees": 20
+        },
+        "models": [
+          "random_walk",
+          "dns_var",
+          "dns_linear",
+          "dns_macro",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "data": {
+          "path": "data/processed/yield_monthly.csv",
+          "features": [
+            "macro_fedfunds",
+            "macro_tcu",
+            "macro_inflation"
+          ],
+          "capacity_series": "TCU",
+          "start": "1985-01-01"
+        },
+        "evaluation": {
+          "target_months": [
+            "2019-01"
+          ],
+          "confirmation_start": "2020-01-01"
+        }
+      },
+      "summary": {
+        "task": "yield",
+        "phase": "exploratory",
+        "completed": 6,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 6,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 2,
+        "score_status_counts": {
+          "点估计：MCMC不适用": 2,
+          "未通过：仅pilot": 4
+        },
+        "fit_stages": 4,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 69,
+        "diagnostic_variables_passed": 22
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    },
+    {
+      "run_id": "20261022T174026706024Z-simulation_yield_missing-e7825d2a",
+      "config_name": "simulation_yield_missing",
+      "task": "simulation_yield",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 12,
+      "expected_score_rows": 12,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 12,
+      "config_sha256": "e7825d2ab517104ff264fbe468b9343cb6a4176e4d4fff55fef12ef7bcd61553",
+      "git_commit": "2f0f430efd608296f103a90940c78d3b40e3fc04",
+      "data_sha256": null,
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "b3ffa09aff7c5fe0e9dc110dcb18d7eac9d95856d1ba712d12b173e6b597bbef",
+      "scores_csv_sha256": "ffbed20b4cc899e3fdfd7d6b7ff130ce40f4dc84fd0c96a9960dc668ea2f3852",
+      "diagnostics_csv_sha256": "f441de2fdf8513435719a9b3c4fb9384a71e4aa149f2ea6dab895edc950c18de",
+      "chains": 4,
+      "draws_per_chain": 1000,
+      "trees": 20,
+      "elapsed_seconds": 104.98003634299994,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "86a02e4e0be64799693a82c9ec30f6fbb8178173163d5c8cc9cde2988d9d8f9d",
+        "scripts/experiment.R": "e87d2498328e795a7abc982cacb92e2195d433a45755384045feaef04bc3ebf7",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "4a9c7e062f2c925d7f687f6674a19d36e101766eb5cec193cee3f434d1a16db9",
+        "scripts/run.py": "31175ca745e8200cd38ce22203e1ad12996ccc31993eb2ef4426203071ca000c",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "b6e600b0a034effad35841aef050e90c7c111f935633bac2b1155872fad80024",
+        "config.json": "e7825d2ab517104ff264fbe468b9343cb6a4176e4d4fff55fef12ef7bcd61553",
+        "summary.json": "520a2f11f5fd9c33987b6a166ee87aa57456158045e2f872e5534f9c50599cfe",
+        "scores.csv": "ffbed20b4cc899e3fdfd7d6b7ff130ce40f4dc84fd0c96a9960dc668ea2f3852",
+        "diagnostics.csv": "f441de2fdf8513435719a9b3c4fb9384a71e4aa149f2ea6dab895edc950c18de",
+        "prediction_rows.csv": "ae5634c4df529b4fdf71e88a8f60030afff5bea1450d0b3ac0f443f88e65a36d",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "simulation_yield",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 4,
+          "burn": 1000,
+          "draws": 1000,
+          "trees": 20
+        },
+        "models": [
+          "dns_macro",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "simulation": {
+          "n": 120,
+          "replicates": 1,
+          "scenarios": [
+            "nonlinear"
+          ],
+          "noise": [
+            "low",
+            "high"
+          ],
+          "missing_modes": [
+            "none",
+            "sparse"
+          ]
+        }
+      },
+      "summary": {
+        "task": "simulation_yield",
+        "phase": "exploratory",
+        "completed": 12,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 12,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 12
+        },
+        "fit_stages": 12,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 204,
+        "diagnostic_variables_passed": 120
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "68285fd6d800229937f734291d093afb21b9f7d69c5ab91b3ce1a1d07339426b",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    },
+    {
+      "run_id": "20261022T174027943774Z-simulation_yield-34654078",
+      "config_name": "simulation_yield",
+      "task": "simulation_yield",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 36,
+      "expected_score_rows": 36,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 36,
+      "config_sha256": "346540788063ecb26389484b8d4141e1157e10771f5ce22ba0bfd57045c15774",
+      "git_commit": "2f0f430efd608296f103a90940c78d3b40e3fc04",
+      "data_sha256": null,
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "b3ffa09aff7c5fe0e9dc110dcb18d7eac9d95856d1ba712d12b173e6b597bbef",
+      "scores_csv_sha256": "2b309b7bfeca42e06bbd9ab984d3ed6a3e748db54a32b4a7f72b996d5ae6c71b",
+      "diagnostics_csv_sha256": "457ff7a95f4bc290e7f3eda42a26a8e7c5e0f955557bd4c370d1404e1fa5d3d8",
+      "chains": 2,
+      "draws_per_chain": 100,
+      "trees": 20,
+      "elapsed_seconds": 20.06125079000003,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "692d284fb9301a72373744a534b297338a4c3673cab7845bd73a88e9874cb685",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "86a02e4e0be64799693a82c9ec30f6fbb8178173163d5c8cc9cde2988d9d8f9d",
+        "scripts/experiment.R": "e87d2498328e795a7abc982cacb92e2195d433a45755384045feaef04bc3ebf7",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "4a9c7e062f2c925d7f687f6674a19d36e101766eb5cec193cee3f434d1a16db9",
+        "scripts/run.py": "31175ca745e8200cd38ce22203e1ad12996ccc31993eb2ef4426203071ca000c",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "569604355954b155bce45b209b879c4d87e35098e8a970941f2c772fe3ca65ee",
+        "config.json": "4fcb5c656979d8c13e5bc28ec4a80035f8e1520a9bacdde0729b19860b6453a2",
+        "summary.json": "cc2d77be48d4fc7535c56b4c359c8d658776e3dd09d95d56d9fa0ce8a21f4176",
+        "scores.csv": "2b309b7bfeca42e06bbd9ab984d3ed6a3e748db54a32b4a7f72b996d5ae6c71b",
+        "diagnostics.csv": "457ff7a95f4bc290e7f3eda42a26a8e7c5e0f955557bd4c370d1404e1fa5d3d8",
+        "prediction_rows.csv": "d26eefa257acce8a731221f1039feede0ac4dd81d6313d1f9918800200e4f5ab",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "simulation_yield",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 2,
+          "burn": 100,
+          "draws": 100,
+          "trees": 20
+        },
+        "models": [
+          "dns_macro",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "simulation": {
+          "n": 120,
+          "replicates": 2,
+          "scenarios": [
+            "linear",
+            "nonlinear",
+            "conditional_persistence"
+          ],
+          "noise": [
+            "low",
+            "high"
+          ]
+        }
+      },
+      "summary": {
+        "task": "simulation_yield",
+        "phase": "exploratory",
+        "completed": 36,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 36,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 36
+        },
+        "fit_stages": 36,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 612,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "68285fd6d800229937f734291d093afb21b9f7d69c5ab91b3ce1a1d07339426b",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    },
+    {
+      "run_id": "20261022T174341747780Z-yield_pilot-d216c29e",
+      "config_name": "yield_pilot",
+      "task": "yield",
+      "status": "completed",
+      "role": "scientific_exploratory",
+      "selected_for_results": true,
+      "selection_reason": "Selected completed exploratory run; diagnostic status is reported separately",
+      "score_rows": 18,
+      "expected_score_rows": 18,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 6,
+      "fit_stages_passed": 0,
+      "fit_stages": 12,
+      "config_sha256": "d216c29e0861540241c92c20b02c118a67493d647d319897d9ff3e2d881b58a0",
+      "git_commit": "2f0f430efd608296f103a90940c78d3b40e3fc04",
+      "data_sha256": "fbdab87bb19089ef33d6009aaea9d62a12e784b6c2cfa0cabf035f44c489c349",
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "b91997d3422aa46aabbc3048fc9cd0308bf72eb33e015d0e88905aa4861c28c9",
+      "scores_csv_sha256": "bc6851c8d7f22c98348edceedaa6335d0dade082baacfbf5df172e1b613d216d",
+      "diagnostics_csv_sha256": "e009d99c2be1e65dc97fdca4bea2b4cd5b5e3a8c78762797b6ac132c98a3dca2",
+      "chains": 2,
+      "draws_per_chain": 100,
+      "trees": 20,
+      "elapsed_seconds": 8.76952907499981,
+      "source_file_sha256": {
+        "R/air.R": "7e2d4bc63516923efc75aba5ca31c6e6c40cdd31cbb8ad0df69676d88d06f10a",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "8e58a30875a378257176e9916ac96b061a46956a236e388f88c1892bdc6f3fdc",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "f8bd00ecd826f7b9879cc9d66ae2e3a8bb6384fe6de49f5f7e148767dff63fb5",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "86a02e4e0be64799693a82c9ec30f6fbb8178173163d5c8cc9cde2988d9d8f9d",
+        "scripts/experiment.R": "e87d2498328e795a7abc982cacb92e2195d433a45755384045feaef04bc3ebf7",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "4a9c7e062f2c925d7f687f6674a19d36e101766eb5cec193cee3f434d1a16db9",
+        "scripts/run.py": "31175ca745e8200cd38ce22203e1ad12996ccc31993eb2ef4426203071ca000c",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "bae4dfb91b99e3a3d25860b11fcc79acc052511545f2995a7d6fa028b49eabdf",
+        "config.json": "d216c29e0861540241c92c20b02c118a67493d647d319897d9ff3e2d881b58a0",
+        "summary.json": "36406cb45862cc4ae376c3da2883b4815dcedbd00fb7c80eb242811ae9f54b91",
+        "scores.csv": "bc6851c8d7f22c98348edceedaa6335d0dade082baacfbf5df172e1b613d216d",
+        "diagnostics.csv": "e009d99c2be1e65dc97fdca4bea2b4cd5b5e3a8c78762797b6ac132c98a3dca2",
+        "prediction_rows.csv": "bd6d93d75c29494e72ec2f432dd11cb03416f6c09022df0a5ae687c5d26ce29d",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "yield",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 2,
+          "burn": 100,
+          "draws": 100,
+          "trees": 20
+        },
+        "models": [
+          "random_walk",
+          "dns_var",
+          "dns_linear",
+          "dns_macro",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "data": {
+          "path": "data/processed/yield_monthly.csv",
+          "features": [
+            "macro_fedfunds",
+            "macro_tcu",
+            "macro_inflation"
+          ],
+          "capacity_series": "TCU",
+          "start": "1985-01-01"
+        },
+        "evaluation": {
+          "target_months": [
+            "2006-01",
+            "2012-01",
+            "2019-01"
+          ],
+          "confirmation_start": "2020-01-01"
+        }
+      },
+      "summary": {
+        "task": "yield",
+        "phase": "exploratory",
+        "completed": 18,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 18,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 6,
+        "score_status_counts": {
+          "点估计：MCMC不适用": 6,
+          "未通过：仅pilot": 12
+        },
+        "fit_stages": 12,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 207,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "833926e3a846486f4e8f54083ec82e63e5fdf0858c579ace3cfd1a6316f8a309",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    },
+    {
+      "run_id": "20261022T174944119241Z-air_pilot-4e04475f",
+      "config_name": "air_pilot",
+      "task": "air",
+      "status": "completed",
+      "role": "workflow_validation",
+      "selected_for_results": false,
+      "selection_reason": "Prediction diagnostic wiring validation; excluded from fixed scientific result selection",
+      "score_rows": 12,
+      "expected_score_rows": 12,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 0,
+      "fit_stages_passed": 0,
+      "fit_stages": 17,
+      "config_sha256": "4e04475fdf20d8de8ddbe99c8b5a9576b1e4348e4530a9cfa447c837d671fb7e",
+      "git_commit": "2f0f430efd608296f103a90940c78d3b40e3fc04",
+      "data_sha256": "42335552048262b10371adaee051bc751cff952107be55d1ac081f19c0762649",
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "c528aaa26a91203a0fe15989c082c36bfd6a16d6afb359ed5753bc7d04b21615",
+      "scores_csv_sha256": "9d14567b823fa23de67e7caffd277fe3a9fe00247a5f4be5e34e7184ee52f7ef",
+      "diagnostics_csv_sha256": "ff3fe74c77f2e3701ca9a7f76bdba5f5ca0365c4b16135d0d6edf6d2d426dfaa",
+      "chains": 2,
+      "draws_per_chain": 100,
+      "trees": 20,
+      "elapsed_seconds": 9.275632985999891,
+      "source_file_sha256": {
+        "R/air.R": "f3b29af58e4a22399fec349a2c20d4cb15321cc9eea46b10f8cbfda5ae013864",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "990bada8d598fb5a0aba81d893c1f8836dd81aadb5e4070a6e8c56927dc80f88",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "20ec2045fdb459344e9ebe4d2b21e26f45a699079cee7389af556acb38898aa8",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "86a02e4e0be64799693a82c9ec30f6fbb8178173163d5c8cc9cde2988d9d8f9d",
+        "scripts/experiment.R": "aa49e28a8137a812736550bbf7ab29077ef5e9b2dbe339780f6dcc4be4daca51",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/plot_results.py": "d8ee290869d2d948af54e7791e064789115997f2c035ff6ce992f38ef2172586",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "b4185408f85a8f3cd3b391a9d7c1d0e32cd3f82d3f836b5e55e59b5b397b449e",
+        "scripts/run.py": "31175ca745e8200cd38ce22203e1ad12996ccc31993eb2ef4426203071ca000c",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "5e4579b6af0dd284a5c7206d9e99fc8ab3e09bcd164568c33567b8fc726ec475",
+        "config.json": "7e92821f4f794e9dda0d512f6e7f4ad658c08500677e48d9392b7f4882ff3129",
+        "summary.json": "f49e8df57e3f67927531f8a728e3fd2acb25fe254a81110cf9a9cb810f9a4c69",
+        "scores.csv": "9d14567b823fa23de67e7caffd277fe3a9fe00247a5f4be5e34e7184ee52f7ef",
+        "diagnostics.csv": "ff3fe74c77f2e3701ca9a7f76bdba5f5ca0365c4b16135d0d6edf6d2d426dfaa",
+        "prediction_rows.csv": "d5bb37bb5dc629b858cb23c0cd62112b21fd06bf67383f880fbee9e7c451aaeb",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "air",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 2,
+          "burn": 100,
+          "draws": 100,
+          "trees": 20,
+          "rho": 0.99
+        },
+        "models": [
+          "bart_static",
+          "linear_dynamic",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "data": {
+          "path": "data/processed/air_quality.csv",
+          "features": [
+            "PT08_1",
+            "PT08_2",
+            "PT08_3",
+            "PT08_4",
+            "PT08_5",
+            "T",
+            "RH",
+            "AH"
+          ]
+        },
+        "evaluation": {
+          "split": "validation",
+          "gaps_hours": [
+            24,
+            72,
+            168
+          ],
+          "max_blocks": 3,
+          "min_observed_fraction": 0.8
+        }
+      },
+      "summary": {
+        "task": "air",
+        "phase": "exploratory",
+        "completed": 12,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 12,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 0,
+        "score_status_counts": {
+          "未通过：仅pilot": 12
+        },
+        "fit_stages": 17,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 151,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "731d35532c824bcb0bd90b98d42fe7a6f6de79f0e89451b802b9c53be61eb8e4",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    },
+    {
+      "run_id": "20261022T174944126036Z-yield_pilot-d216c29e",
+      "config_name": "yield_pilot",
+      "task": "yield",
+      "status": "completed",
+      "role": "workflow_validation",
+      "selected_for_results": false,
+      "selection_reason": "Prediction diagnostic wiring validation; excluded from fixed scientific result selection",
+      "score_rows": 18,
+      "expected_score_rows": 18,
+      "failed_cases": 0,
+      "passed_stochastic_score_rows": 0,
+      "point_estimate_rows_exempt": 6,
+      "fit_stages_passed": 0,
+      "fit_stages": 12,
+      "config_sha256": "d216c29e0861540241c92c20b02c118a67493d647d319897d9ff3e2d881b58a0",
+      "git_commit": "2f0f430efd608296f103a90940c78d3b40e3fc04",
+      "data_sha256": "fbdab87bb19089ef33d6009aaea9d62a12e784b6c2cfa0cabf035f44c489c349",
+      "source_manifest_sha256": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141",
+      "source_snapshot_sha256": "c528aaa26a91203a0fe15989c082c36bfd6a16d6afb359ed5753bc7d04b21615",
+      "scores_csv_sha256": "5d7921ac20e1b6d6f1f7d64019b72eb101e70b2c4a626edafd8c1a00a4aa117e",
+      "diagnostics_csv_sha256": "1f37478a0f7686597e89b0c99462ee2af2ac7f5cfa301cf547271641e751751f",
+      "chains": 2,
+      "draws_per_chain": 100,
+      "trees": 20,
+      "elapsed_seconds": 10.401044606000141,
+      "source_file_sha256": {
+        "R/air.R": "f3b29af58e4a22399fec349a2c20d4cb15321cc9eea46b10f8cbfda5ae013864",
+        "R/bart_adapter.R": "49da10297c42e6415e4c44cb7134119ea13ab28f68a7a5565936261fd27fdf7c",
+        "R/evaluation.R": "03e3ece3e87eb42c5b27ce173237863d398b224e9819f92cff9c9da001f1149f",
+        "R/metrics.R": "990bada8d598fb5a0aba81d893c1f8836dd81aadb5e4070a6e8c56927dc80f88",
+        "R/ssm.R": "abeb34b788e76c4ef24f13cf7f1c51443d58b69d1d4a6e2dedd15437a14d3b27",
+        "R/yield.R": "20ec2045fdb459344e9ebe4d2b21e26f45a699079cee7389af556acb38898aa8",
+        "scripts/Rscript": "f68a949608618ba0f67eabf78ab8d21c223892d20992c2e849fb498afcdf155e",
+        "scripts/build_native.R": "86a02e4e0be64799693a82c9ec30f6fbb8178173163d5c8cc9cde2988d9d8f9d",
+        "scripts/experiment.R": "aa49e28a8137a812736550bbf7ab29077ef5e9b2dbe339780f6dcc4be4daca51",
+        "scripts/install.sh": "2ff0ebd7305e5d9733dd2ff13ac4f57206712d6528e34b1291aac14d56a08aa2",
+        "scripts/plot_results.py": "d8ee290869d2d948af54e7791e064789115997f2c035ff6ce992f38ef2172586",
+        "scripts/prepare_data.py": "420f2ad33a1603504188edd887bf7e4f506ace52c841dac74c2824e480917e7e",
+        "scripts/report.py": "b4185408f85a8f3cd3b391a9d7c1d0e32cd3f82d3f836b5e55e59b5b397b449e",
+        "scripts/run.py": "31175ca745e8200cd38ce22203e1ad12996ccc31993eb2ef4426203071ca000c",
+        "src/ssm_native.c": "f525fcd825a4ab03578e6a884a5a4a8ac1f7e9c6077dde7611a6f82096676749"
+      },
+      "artifact_file_sha256": {
+        "metadata.json": "e88460f5edc2f82b14a8aec9cd562f9ee6846080c032b72b6ea9e180d76d7724",
+        "config.json": "d216c29e0861540241c92c20b02c118a67493d647d319897d9ff3e2d881b58a0",
+        "summary.json": "36406cb45862cc4ae376c3da2883b4815dcedbd00fb7c80eb242811ae9f54b91",
+        "scores.csv": "5d7921ac20e1b6d6f1f7d64019b72eb101e70b2c4a626edafd8c1a00a4aa117e",
+        "diagnostics.csv": "1f37478a0f7686597e89b0c99462ee2af2ac7f5cfa301cf547271641e751751f",
+        "prediction_rows.csv": "bd6d93d75c29494e72ec2f432dd11cb03416f6c09022df0a5ae687c5d26ce29d",
+        "data_manifest.json": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc",
+        "sources.json": "e8355cb0cf3b8110833679c619a5daffa3c15b4e415fb1fa29678b5691756141"
+      },
+      "config": {
+        "schema_version": 1,
+        "task": "yield",
+        "phase": "exploratory",
+        "seed": 20261023,
+        "control": {
+          "chains": 2,
+          "burn": 100,
+          "draws": 100,
+          "trees": 20
+        },
+        "models": [
+          "random_walk",
+          "dns_var",
+          "dns_linear",
+          "dns_macro",
+          "bart_two_stage",
+          "bart_joint"
+        ],
+        "data": {
+          "path": "data/processed/yield_monthly.csv",
+          "features": [
+            "macro_fedfunds",
+            "macro_tcu",
+            "macro_inflation"
+          ],
+          "capacity_series": "TCU",
+          "start": "1985-01-01"
+        },
+        "evaluation": {
+          "target_months": [
+            "2006-01",
+            "2012-01",
+            "2019-01"
+          ],
+          "confirmation_start": "2020-01-01"
+        }
+      },
+      "summary": {
+        "task": "yield",
+        "phase": "exploratory",
+        "completed": 18,
+        "failures": 0,
+        "confirmation_opened": false,
+        "inference_warning": "Pilot chains are not automatically converged; inspect diagnostics.csv before substantive claims"
+      },
+      "diagnostics": {
+        "score_rows": 18,
+        "score_diagnostic_pass": 0,
+        "point_estimate_rows_exempt": 6,
+        "score_status_counts": {
+          "点估计：MCMC不适用": 6,
+          "未通过：仅pilot": 12
+        },
+        "fit_stages": 12,
+        "fit_stages_passed": 0,
+        "diagnostic_variables": 351,
+        "diagnostic_variables_passed": 0
+      },
+      "failures": [],
+      "integrity_issues": [],
+      "tracked_diff_sha256": "731d35532c824bcb0bd90b98d42fe7a6f6de79f0e89451b802b9c53be61eb8e4",
+      "processed_manifest_sha256": "bf923833c73750c8d00c93ea12f38ed2e7a68d7e8034227b7c803291fd3a8fdc"
+    }
+  ],
+  "selection_run_ids": {
+    "yield_pilot": "20261022T174341747780Z-yield_pilot-d216c29e",
+    "yield_diagnostic": "20261022T173918202213Z-yield_diagnostic-2dfcb415",
+    "simulation_yield": "20261022T174027943774Z-simulation_yield-34654078",
+    "simulation_yield_diagnostic": "20261022T173918199075Z-simulation_yield_diagnostic-928a6ac9",
+    "simulation_yield_missing": "20261022T174026706024Z-simulation_yield_missing-e7825d2a",
+    "air_diagnostic": "20261022T173136675021Z-air_diagnostic-e52735dd",
+    "simulation_air_diagnostic": "20261022T173136683849Z-simulation_air_diagnostic-036e60dc",
+    "simulation_air_mixing_check": "20261022T173620494398Z-simulation_air_mixing_check-f2011729",
+    "air_mixing_check": "20261022T173619277606Z-air_mixing_check-6fd39442"
+  },
+  "pending": []
+}
